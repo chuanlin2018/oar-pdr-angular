@@ -1,0 +1,13 @@
+.file-list {
+    display: block;
+    background: #fff;
+    border-radius: 0px;
+    border: black;
+    padding: 10px;
+    width: 200px;
+}
+
+.scroll {
+    height: 300px;
+    overflow-y: auto;
+}

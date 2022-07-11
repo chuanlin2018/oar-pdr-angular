@@ -1,0 +1,8 @@
+.mat-grid-tile-content {
+    align-items: unset;
+    position: inherit;
+}
+
+.stack{
+    display: block;
+}
