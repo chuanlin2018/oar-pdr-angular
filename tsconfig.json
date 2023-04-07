@@ -11,9 +11,17 @@
     "noImplicitReturns": true,
     "noFallthroughCasesInSwitch": true,
     "sourceMap": true,
+    "resolveJsonModule": true,
+    "paths": {
+      "my-awesome-lib-with-jest": [
+        "dist/my-awesome-lib-with-jest/my-awesome-lib-with-jest",
+        "dist/my-awesome-lib-with-jest"
+      ]
+    },
     "declaration": false,
     "downlevelIteration": true,
     "experimentalDecorators": true,
+    "esModuleInterop": true,
     "moduleResolution": "node",
     "importHelpers": true,
     "target": "es2017",
