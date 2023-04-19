@@ -11,6 +11,7 @@ import { AppConfig } from '../../config/config';
 import { TransferState } from '@angular/platform-browser';
 import { AngularEnvironmentConfigService } from '../../config/config.service';
 import { IEnvironment } from '../../../environments/ienvironment';
+import * as env from '../../../environments/environment'; 
 
 describe('BundleplanComponent', () => {
     let ienv : IEnvironment;
@@ -21,7 +22,7 @@ describe('BundleplanComponent', () => {
     let ts: TransferState = new TransferState();
 
     beforeEach(waitForAsync(() => {
-        cfg = (new AngularEnvironmentConfigService(ienv, plid, ts)).getConfig() as AppConfig;
+        cfg = (new AngularEnvironmentConfigService(env, plid, ts)).getConfig() as AppConfig;
         cfg.locations.pdrSearch = "https://goob.nist.gov/search";
         cfg.status = "Unit Testing";
         cfg.appVersion = "2.test";

@@ -13,6 +13,7 @@ import { DragDropModule } from '@angular/cdk/drag-drop';
 import { TextEditModule } from './text-edit/text-edit.module';
 import { HttpClientModule } from '@angular/common/http';
 import { TextareaAutoresizeModule } from './textarea-autoresize/textarea-autoresize.module';
+import { ToastrModule } from 'ngx-toastr';
 
 @NgModule({
     declarations: [
@@ -30,7 +31,8 @@ import { TextareaAutoresizeModule } from './textarea-autoresize/textarea-autores
         DragDropModule,
         TextEditModule,
         HttpClientModule,
-        TextareaAutoresizeModule
+        TextareaAutoresizeModule,
+        ToastrModule.forRoot()
     ],
     providers: [
         GoogleAnalyticsService

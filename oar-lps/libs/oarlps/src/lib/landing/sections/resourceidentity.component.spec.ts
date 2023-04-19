@@ -11,25 +11,21 @@ import { MetadataUpdateService } from '../editcontrol/metadataupdate.service';
 import { UserMessageService } from '../../frame/usermessage.service';
 import { AuthService, WebAuthService, MockAuthService } from '../editcontrol/auth.service';
 import { GoogleAnalyticsService } from '../../shared/ga-service/google-analytics.service';
-import { config, testdata, context } from '../../../environments/environment';
+import * as ngenv from '../../../environments/environment';
 import { IEnvironment } from '../../../environments/ienvironment';
 import * as _ from 'lodash-es';
+import { DragDropModule } from '@angular/cdk/drag-drop';
 
 describe('ResourceIdentityComponent', () => {
-    let ienv : IEnvironment;
-    ienv.config = config;
-    ienv.testdata = testdata;
-    ienv.context = context;
-
     let component : ResourceIdentityComponent;
     let fixture : ComponentFixture<ResourceIdentityComponent>;
-    let cfg : AppConfig = new AppConfig(config);
-    let rec : NerdmRes = testdata['test1'];
-    let authsvc : AuthService = new MockAuthService(null, ienv);
+    let cfg : AppConfig = new AppConfig(ngenv.config);
+    let rec : NerdmRes = ngenv.testdata['test1'];
+    let authsvc : AuthService = new MockAuthService(null, ngenv);
 
     let makeComp = function() {
         TestBed.configureTestingModule({
-            imports: [ SectionsModule ],
+            imports: [ SectionsModule, DragDropModule ],
             declarations: [  ],
             providers: [
                 { provide: AppConfig, useValue: cfg },

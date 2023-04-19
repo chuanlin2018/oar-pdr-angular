@@ -2,8 +2,6 @@ import * as cfg from "./config"
 import * as cfgsvc from "./config.service"
 import { TransferState, StateKey } from '@angular/platform-browser';
 import * as ngenv from '../../environments/environment';
-import { IEnvironment } from '../../environments/ienvironment';
-import * as env from '../../environments/environment';
 
 describe("config.service deepcopy", function() {
 
@@ -24,14 +22,9 @@ describe("config.service deepcopy", function() {
 });
 
 describe("config.service AngularEnvironmentConfigService", function() {
-    let ienv : IEnvironment;
     let plid : Object = "browser";
     let ts : TransferState = new TransferState();
-    let svc = new cfgsvc.AngularEnvironmentConfigService(ienv, plid, ts);
-
-    ienv.config = env.config;
-    ienv.context = env.context;
-    ienv.testdata = env.testdata;
+    let svc = new cfgsvc.AngularEnvironmentConfigService(ngenv, plid, ts);
 
     it("getConfig()", function() {
         let ac : cfg.AppConfig = svc.getConfig() as cfg.AppConfig;
@@ -44,15 +37,15 @@ describe("config.service AngularEnvironmentConfigService", function() {
 });
 
 describe("config.service newConfigService", function() {
+    let plid : Object = "browser";
+    let ts : TransferState = new TransferState();
 
     it("angular-env", function() {
-        let ienv : IEnvironment;
-        let plid : Object = "browser";
-        let ts = new TransferState();
-        let svc = cfgsvc.newConfigService(ienv, plid, ts);
+        debugger;
+        let svc = cfgsvc.newConfigService(ngenv, plid, ts);
 
         expect(svc instanceof cfgsvc.ConfigService).toBe(true);
-        expect(svc instanceof cfgsvc.AngularEnvironmentConfigService).toBe(true);
+        expect(svc instanceof cfgsvc.RemoteFileConfigService).toBe(true);
 
         let ac : cfg.AppConfig = svc.getConfig() as cfg.AppConfig;
         expect(ac instanceof cfg.AppConfig).toBe(true);
@@ -62,33 +55,12 @@ describe("config.service newConfigService", function() {
     });
 
     it("transfer-state", function() {
-        let plid : Object = "browser";
-        let ienv : IEnvironment;
         let data : cfg.LPSConfig = cfgsvc.deepCopy(ngenv.config);
         data["mode"] = "prod";
         let ts = new TransferState();
         ts.set<cfg.LPSConfig>(cfgsvc.CONFIG_TS_KEY, data);
         
-<<<<<<< HEAD
-        let svc = cfgsvc.newConfigService(ienv, plid, ts);
-=======
         let svc = cfgsvc.newConfigService(ngenv, plid, ts);
-
-        expect(svc instanceof cfgsvc.ConfigService).toBe(true);
-        expect(svc instanceof cfgsvc.TransferStateConfigService).toBe(true);
-
-        let ac : cfg.AppConfig = svc.getConfig() as cfg.AppConfig;
-        expect(ac instanceof cfg.AppConfig).toBe(true);
-        expect(ac.status).toBe("Dev Version");
-        expect(ac["mode"]).toBe("prod");
-        expect(ac["source"]).toBe("transfer-state");
-    });
-
-    it("remote file", function() {
-        let env = cfgsvc.deepCopy(negenv);
-        env.context.configEndpoint("assets/config.json");
-        let svc = cfgsvc.newConfigService(ngenv, plid, ts);
->>>>>>> feature/bs-config-fetch
 
         expect(svc instanceof cfgsvc.ConfigService).toBe(true);
         expect(svc instanceof cfgsvc.TransferStateConfigService).toBe(true);
