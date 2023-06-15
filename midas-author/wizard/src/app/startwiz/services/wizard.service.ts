@@ -21,11 +21,22 @@ export class WizardService {
                     this.MIDASAPI = this.confValues.MIDASAPI;
                 }
 
+
+    setToken(token: string){
+        this.token = token;
+    }
+
     public updateMetadata(md : Object) : Observable<any> {
         // To transform the output with proper error handling, we wrap the
         // HttpClient.patch() Observable with our own Observable
         // //
         // return of({"id":"12345"});
+        if(this.token == "") {
+            let err = "You are not authorized to edit this record.";
+            console.log(err);
+            return new Observable<string>(subscriber=>{ subscriber.error(err)});
+        }
+
         let url = this.MIDASAPI + this.saveapi;
         let body = JSON.stringify(md);
 

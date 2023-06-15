@@ -7,6 +7,13 @@ import { FormControl, FormGroup, Validators, FormBuilder, FormGroupDirective} fr
 import { Router } from "@angular/router";
 import { WizardService } from './services/wizard.service';
 import { AppConfig, Config } from './services/config-service.service';
+import { UserDetails, deepCopy, AuthInfo, LibWebAuthService } from 'oarng';
+
+export class AuthStatus {
+    static readonly AUTHORIZED = 'Authorized';
+    static readonly AUTHENTICATED = 'Authenticated';
+    static readonly NOTLOGIN = 'NotLoggedIn';
+}
 
 @Component({
     selector: 'app-wizard',
@@ -29,11 +36,15 @@ export class StepWizardComponent implements OnInit {
 
     fgSteps!: FormGroup;
 
+    authStatus: string = AuthStatus.NOTLOGIN;
+    resid: string = "Wizard";
+
     constructor(private stepService: StepService,
                 private fb: FormBuilder, 
                 private cdr: ChangeDetectorRef,
                 private router: Router,
                 private wizardService: WizardService,
+                public libWebAuthService: LibWebAuthService,
                 private appConfig: AppConfig) { 
 
             this.confValues = this.appConfig.getConfig();
@@ -42,13 +53,51 @@ export class StepWizardComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.reset();
+        this.authorizeEditing();
+    }
 
-        this.currentStepSub = this.stepService.getCurrentStep().subscribe((step: StepModel) => {
-            this.currentStep = step;
-        });
+    get isAuthorized() {
+        return this.authStatus == AuthStatus.AUTHORIZED;
+    }
 
-        this.bodyHeight = window.innerHeight - 150;
+    get isAuthenticated() {
+        return this.authStatus == AuthStatus.AUTHENTICATED;
+    }
+
+    get notLoggedin() {
+        return this.authStatus == AuthStatus.NOTLOGIN;
+    }
+    /**
+     * 
+     */
+    authorizeEditing() {
+        this.libWebAuthService.getAuthInfo().subscribe({
+            next: (info) =>{
+                if (info && info.token) {
+                    this.wizardService.setToken(info.token);
+                    this.authStatus = AuthStatus.AUTHORIZED;
+
+                    this.reset();
+
+                    this.currentStepSub = this.stepService.getCurrentStep().subscribe((step: StepModel) => {
+                        this.currentStep = step;
+                    });
+            
+                    this.bodyHeight = window.innerHeight - 150;
+                }
+                else if (info && info.userDetails && info.userDetails.userId) {
+                    // the user is authenticated but not authorized
+                    this.authStatus = AuthStatus.AUTHENTICATED;
+                }
+                else {
+                    // the user is not authenticated!
+                    this.authStatus = AuthStatus.NOTLOGIN;
+                }
+            },
+            error: (err) => {
+                this.authStatus = AuthStatus.NOTLOGIN;
+            }
+        })
     }
 
     formGroupReset() {

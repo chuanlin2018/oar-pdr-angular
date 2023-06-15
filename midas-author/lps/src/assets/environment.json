@@ -4,5 +4,6 @@
     "PDRAPI":  "http://testdata.nist.gov/od/id/",
     "DISTAPI": "http://testdata.nist.gov/od/ds/",
     "METAPI":  "http://testdata.nist.gov/metaurl/",
-    "LANDING": "http://testdata.nist.gov/rmm/"
+    "LANDING": "http://testdata.nist.gov/rmm/",
+    "AUTHAPI":  "https://localhost/sso/"
 }

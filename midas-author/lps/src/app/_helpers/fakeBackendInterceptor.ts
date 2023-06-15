@@ -145,7 +145,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
         //======
         // // authenticate
-        if (request.url.indexOf('auth/_perm/') > -1 && request.method === 'GET') {
+        if (request.url.indexOf('auth/_tokeninfo') > -1 && request.method === 'GET') {
             let body: any = {
                 userDetails: {
                     userId: 'xyz@nist.gov',

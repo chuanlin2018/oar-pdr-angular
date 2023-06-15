@@ -168,14 +168,39 @@ export class FakeBackendInterceptor implements HttpInterceptor {
       //     return of(new HttpResponse({ status: 200, body }));
       // }
 
-      // if (request.url.endsWith('/saml-sp/auth/token') && request.method === 'GET') {
-      //   let body: ApiToken = {
-      //     userId: '1234',
-      //     token: 'fake-jwt-token'
-      //   };
-      //   // window.alert('Click ok to login');
-      //   return of(new HttpResponse({ status: 200, body }));
-      // }
+        // // authenticate
+        if (request.url.indexOf('auth/_tokeninfooo') > -1 && request.method === 'GET') {
+            let body: any = {
+                userDetails: {
+                    userId: 'xyz@nist.gov',
+                    userName: 'xyz',
+                    userLastName: 'Doe',
+                    userEmail: 'xyz@nist.gov',
+                    userGroup: 'Domain Users',
+                    userDiv: 'Office of Data and Informatics',
+                    userDivNum: '641',
+                    userOU: 'Material Measurement Laboratory'
+                },
+                token: 'fake-jwt-token'
+            };
+            console.log("logging in...");
+
+            //Authorized
+            return of(new HttpResponse({ status: 200, body }));
+
+            // Athenticated but not authorized
+            // body.token = null;
+            // return of(new HttpResponse({ status: 200, body }));
+
+            // Reject
+            // return throwError(
+            //   JSON.stringify({
+            //       "status": 401,
+            //       "Userid": "xyz@nist.gov",
+            //       "message": "Unauthorizeduser: User token is empty or expired."
+            //   })
+            // );
+        }
 
       // if (request.url.indexOf('/customization/api/draft') > -1 && request.method === 'GET') {
       //     console.log("Interceptor returning sample record...");

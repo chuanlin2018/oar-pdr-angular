@@ -7,6 +7,7 @@ import {
     CustomizationService, WebCustomizationService, InMemCustomizationService,
     SystemCustomizationError, ConnectionCustomizationError
 } from './customization.service';
+import { LibWebAuthService, AuthInfo } from 'oarng';
 // import * as ngenv from '../../../environments/environment';
 import { UserDetails } from './interfaces';
 import { deepCopy } from '../../config/config.service';
@@ -19,19 +20,19 @@ import * as environment from '../../../environments/environment';
  * This interface is used for receiving this information from the customization 
  * web service. 
  */
-export interface AuthInfo {
-    /**
-     * the user identifier
-     */
-    userDetails?: UserDetails,
+// export interface AuthInfo {
+//     /**
+//      * the user identifier
+//      */
+//     userDetails?: UserDetails,
 
-    /**
-     * the authorization token needed to edit metadata via the customization service
-     */
-    token?: string,
+//     /**
+//      * the authorization token needed to edit metadata via the customization service
+//      */
+//     token?: string,
 
-    [prop: string]: any;
-}
+//     [prop: string]: any;
+// }
 
 /**
  * the authentication/authorization front-end service to the customization service.
@@ -139,7 +140,10 @@ export class WebAuthService extends AuthService {
      *                (this is normally provided by the root injector).
      * @param httpcli an HttpClient for communicating with the customization web service
      */
-    constructor(config: AppConfig, private httpcli: HttpClient) {
+    constructor(
+            config: AppConfig, 
+            private httpcli: HttpClient,
+            public libWebAuthService: LibWebAuthService) {
         super();
         this._endpoint = config.get('customizationAPI', '/customization/');
         if (!this._endpoint.endsWith('/')) this._endpoint += "/";
@@ -173,8 +177,8 @@ export class WebAuthService extends AuthService {
 
         // we need an authorization token
         return new Observable<CustomizationService>(subscriber => {
-            this.getAuthorization(resid).subscribe(
-                (info) => {
+            this.libWebAuthService.getAuthInfo(resid).subscribe({
+                next: (info) =>{
                     this._authcred.token = info.token;
                     this._authcred.userDetails = deepCopy(info.userDetails);
                     if (info.token) {
@@ -204,7 +208,7 @@ export class WebAuthService extends AuthService {
                         }
                     }
                 },
-                (err) => {
+                error:(err) => {
                     if (err['statusCode'] && err.statusCode == 401) {
                         // User needs to log in; redirect the browser to the authentication server
                         if (!nologin){
@@ -217,7 +221,53 @@ export class WebAuthService extends AuthService {
                     else
                         subscriber.error(err);
                 }
-            );
+            })
+
+            // this.getAuthorization(resid).subscribe(
+            //     (info) => {
+            //         this._authcred.token = info.token;
+            //         this._authcred.userDetails = deepCopy(info.userDetails);
+            //         if (info.token) {
+            //             // the user is authenticated and authorized to edit!
+            //             subscriber.next(
+            //                 new WebCustomizationService(resid, this.endpoint, this.authToken,
+            //                     this.httpcli, info.userDetails.userId)
+            //             );
+            //             subscriber.complete();
+            //         }
+            //         else if (info.userDetails.userId) {
+            //             // the user is authenticated but not authorized
+            //             this.errorMessage = info.errorMessage;
+            //             subscriber.next(null);
+            //             subscriber.complete();
+            //         }
+            //         else {
+            //             // the user is not authenticated!
+            //             subscriber.complete();
+
+            //             // redirect the browser to the authentication server
+            //             if (!nologin){
+            //                 this.loginUser();
+            //             }else {
+            //                 subscriber.next(null);
+            //                 subscriber.complete();
+            //             }
+            //         }
+            //     },
+            //     (err) => {
+            //         if (err['statusCode'] && err.statusCode == 401) {
+            //             // User needs to log in; redirect the browser to the authentication server
+            //             if (!nologin){
+            //                 this.loginUser();
+            //             }else {
+            //                 subscriber.next(null);
+            //                 subscriber.complete();
+            //             }
+            //         }
+            //         else
+            //             subscriber.error(err);
+            //     }
+            // );
         });
     }
 
@@ -232,45 +282,45 @@ export class WebAuthService extends AuthService {
      *            but not authorized, or (3) nothing, indicating that the user is not authenticated.  
      *            If there is a CustomizationError, an exception is sent to the error handler.
      */
-    public getAuthorization(resid: string): Observable<AuthInfo> {
-        let url = this.endpoint + "auth/_perm/" + resid;
-        // console.log(url);
-          // wrap the HttpClient Observable with our own so that we can manage errors
-        return new Observable<AuthInfo>(subscriber => {
-            this.httpcli.get(url, { headers: { 'Content-Type': 'application/json' } }).subscribe(
-                (creds) => {
-                    // URL returned OK
-                    subscriber.next(creds as AuthInfo);
-                },
-                (httperr) => {
-                  console.log('httperr', httperr);
-                    if (httperr.status == 404) {
-                        // URL returned Not Found
-                        subscriber.next({} as AuthInfo);
-                        subscriber.complete();
-                    }
-                    else if (httperr.status < 100 && httperr.error) {
-                        let msg = "Service connection error"
-                        if (httperr['message'])
-                            msg += ": " + httperr.message
-                        if (httperr.error.message)
-                            msg += ": " + httperr.error.message
-                        if (httperr.status == 0 && httperr.statusText.includes('Unknown'))
-                            msg += " (possibly due to CORS restriction?)";
-                        subscriber.error(new ConnectionCustomizationError(msg));
-                    }
-                    else {
-                        // URL returned some other error status
-                        let msg = "Unexpected error during authorization";
-                        // TODO: can we get at body of message when an error occurs?
-                        // msg += (httperr.body['message']) ? httperr.body['message'] : httperr.statusText;
-                        msg += " (" + httperr.status.toString() + " " + httperr.statusText + ")"
-                        subscriber.error(new SystemCustomizationError(msg, httperr.status))
-                    }
-                }
-            );
-        });
-    }
+    // public getAuthorization(resid: string): Observable<AuthInfo> {
+    //     let url = this.endpoint + "auth/_perm/" + resid;
+    //     // console.log(url);
+    //       // wrap the HttpClient Observable with our own so that we can manage errors
+    //     return new Observable<AuthInfo>(subscriber => {
+    //         this.httpcli.get(url, { headers: { 'Content-Type': 'application/json' } }).subscribe(
+    //             (creds) => {
+    //                 // URL returned OK
+    //                 subscriber.next(creds as AuthInfo);
+    //             },
+    //             (httperr) => {
+    //               console.log('httperr', httperr);
+    //                 if (httperr.status == 404) {
+    //                     // URL returned Not Found
+    //                     subscriber.next({} as AuthInfo);
+    //                     subscriber.complete();
+    //                 }
+    //                 else if (httperr.status < 100 && httperr.error) {
+    //                     let msg = "Service connection error"
+    //                     if (httperr['message'])
+    //                         msg += ": " + httperr.message
+    //                     if (httperr.error.message)
+    //                         msg += ": " + httperr.error.message
+    //                     if (httperr.status == 0 && httperr.statusText.includes('Unknown'))
+    //                         msg += " (possibly due to CORS restriction?)";
+    //                     subscriber.error(new ConnectionCustomizationError(msg));
+    //                 }
+    //                 else {
+    //                     // URL returned some other error status
+    //                     let msg = "Unexpected error during authorization";
+    //                     // TODO: can we get at body of message when an error occurs?
+    //                     // msg += (httperr.body['message']) ? httperr.body['message'] : httperr.statusText;
+    //                     msg += " (" + httperr.status.toString() + " " + httperr.statusText + ")"
+    //                     subscriber.error(new SystemCustomizationError(msg, httperr.status))
+    //                 }
+    //             }
+    //         );
+    //     });
+    // }
 
     /**
      * redirect the browser to the authentication service, instructing it to return back to 
@@ -400,7 +450,7 @@ export class MockAuthService extends AuthService {
  * context.useCustomizationService from the angular environment (i.e. 
  * src/environments/environment.ts).  A value of false assumes a develoment context.
  */
-export function createAuthService(ngenv: IEnvironment, config: AppConfig, httpClient: HttpClient, devmode?: boolean)
+export function createAuthService(ngenv: IEnvironment, config: AppConfig, httpClient: HttpClient, libWebAuthService: LibWebAuthService, devmode?: boolean)
     : AuthService {
 
     if (devmode === undefined)
@@ -409,7 +459,7 @@ export function createAuthService(ngenv: IEnvironment, config: AppConfig, httpCl
     if (!devmode) {
         // production mode
         console.log("Will use configured customization web service");
-        return new WebAuthService(config, httpClient);
+        return new WebAuthService(config, httpClient, libWebAuthService);
     }
 
     // dev mode
