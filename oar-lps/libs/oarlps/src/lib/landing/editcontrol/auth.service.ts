@@ -177,7 +177,7 @@ export class WebAuthService extends AuthService {
 
         // we need an authorization token
         return new Observable<CustomizationService>(subscriber => {
-            this.libWebAuthService.getAuthInfo(resid).subscribe({
+            this.libWebAuthService.getAuthInfo().subscribe({
                 next: (info) =>{
                     this._authcred.token = info.token;
                     this._authcred.userDetails = deepCopy(info.userDetails);
