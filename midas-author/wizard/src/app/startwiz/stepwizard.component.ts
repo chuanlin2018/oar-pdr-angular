@@ -13,6 +13,7 @@ export class AuthStatus {
     static readonly AUTHORIZED = 'Authorized';
     static readonly AUTHENTICATED = 'Authenticated';
     static readonly NOTLOGIN = 'NotLoggedIn';
+    static readonly AUTHORIZING = 'Authorizing';
 }
 
 @Component({
@@ -36,8 +37,9 @@ export class StepWizardComponent implements OnInit {
 
     fgSteps!: FormGroup;
 
-    authStatus: string = AuthStatus.NOTLOGIN;
+    authStatus: string = AuthStatus.AUTHORIZING;
     resid: string = "Wizard";
+    authMessage: string = "Authorizing...";
 
     constructor(private stepService: StepService,
                 private fb: FormBuilder, 
@@ -66,6 +68,10 @@ export class StepWizardComponent implements OnInit {
 
     get notLoggedin() {
         return this.authStatus == AuthStatus.NOTLOGIN;
+    }
+
+    get authorizing() {
+        return this.authStatus == AuthStatus.AUTHORIZING;
     }
     /**
      * 
@@ -96,6 +102,7 @@ export class StepWizardComponent implements OnInit {
             },
             error: (err) => {
                 this.authStatus = AuthStatus.NOTLOGIN;
+                this.authMessage = err['message'];
             }
         })
     }

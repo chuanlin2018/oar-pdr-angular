@@ -60,6 +60,6 @@
     You are not authorized to edit this content.
 </div>
 
-<div *ngIf="notLoggedin" style="display: flex;height:100%;justify-content: center;align-items: center;font-size: xx-large;">
-    You are not logged in. Click <span click="authorizeEditing()" style="cursor: pointer; color: var(--link);text-decoration: underline;">here</span> to login. 
+<div *ngIf="notLoggedin || authorizing" style="display: flex;height:100%;justify-content: center;align-items: center;font-size: xx-large;">
+    {{authMessage}}
 </div>
