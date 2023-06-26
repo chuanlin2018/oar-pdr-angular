@@ -4,5 +4,6 @@
     "LANDING": "http://oardev.nist.gov/rmm/",
     "GACODE": "not-set",
     "APPVERSION": "1.3.0",
-    "AUTHAPI":  "https://localhost/sso/"
+    "AUTHAPI":  "https://localhost/sso/",
+    "REDIRECTAUTHAPI": "saml/login?redirectTo="
 }

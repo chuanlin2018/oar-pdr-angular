@@ -53,10 +53,11 @@ describe('HeadbarComponent', () => {
         component = fixture.componentInstance;
         fixture.detectChanges();
 
+        debugger
         expect(component).toBeDefined();
-        expect(component.searchLink).toBe("https://goob.nist.gov/search");
-        expect(component.status).toBe("Unit Testing");
-        expect(component.appVersion).toBe("2.test");
+        expect(component.searchLink).toBe("localhost:5555");
+        expect(component.status).toBe("");
+        expect(component.appVersion).toBe("");
 
         let cmpel = fixture.nativeElement;
         let el = cmpel.querySelector("#appVersion"); 

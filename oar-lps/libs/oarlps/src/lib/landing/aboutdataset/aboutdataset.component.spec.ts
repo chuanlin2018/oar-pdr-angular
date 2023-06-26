@@ -11,6 +11,7 @@ import { GoogleAnalyticsService } from '../../shared/ga-service/google-analytics
 import { config, testdata } from '../../../environments/environment';
 import { By } from "@angular/platform-browser";
 import { MetricsData } from "../metrics-data";
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 import * as _ from 'lodash-es';
 
@@ -22,7 +23,7 @@ describe('AboutdatasetComponent', () => {
 
     beforeEach(waitForAsync(() => {
         TestBed.configureTestingModule({
-            imports: [ AboutdatasetModule ],
+            imports: [ AboutdatasetModule, NoopAnimationsModule ],
             providers: [
                 { provide: AppConfig, useValue: cfg },
                 GoogleAnalyticsService

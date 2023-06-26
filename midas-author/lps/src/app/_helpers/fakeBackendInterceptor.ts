@@ -145,17 +145,17 @@ export class FakeBackendInterceptor implements HttpInterceptor {
 
         //======
         // // authenticate
-        if (request.url.indexOf('auth/_tokeninfo') > -1 && request.method === 'GET') {
-            let body: any = {
-                userDetails: {
-                    userId: 'xyz@nist.gov',
-                    userName: 'xyz'
-                },
-                token: 'fake-jwt-token'
-            };
-            console.log("logging in...")
-            return of(new HttpResponse({ status: 200, body }));
-        }
+        // if (request.url.indexOf('auth/_tokeninfo') > -1 && request.method === 'GET') {
+        //     let body: any = {
+        //         userDetails: {
+        //             userId: 'xyz@nist.gov',
+        //             userName: 'xyz'
+        //         },
+        //         token: 'fake-jwt-token'
+        //     };
+        //     console.log("logging in...")
+        //     return of(new HttpResponse({ status: 200, body }));
+        // }
 
         // midas test data
         // if (request.url.indexOf('midas/dap/mdsx/test1') > -1 && request.method === 'GET') {

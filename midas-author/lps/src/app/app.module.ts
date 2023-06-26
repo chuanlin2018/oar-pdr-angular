@@ -69,6 +69,7 @@ enableProdMode();
         DirectivesModule,
         DatacartModule,
         MetricsModule,
+        OARngModule,
         SharedModule.forRoot(),
         // FragmentPolyfillModule.forRoot({
         //     smooth: true

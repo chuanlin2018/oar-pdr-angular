@@ -61,7 +61,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
             "type": "dmp"
         
     }
-    console.log("request.url", request.url);
+    console.log("request.url +++++++++", request.url);
     // wrap in delayed observable to simulate server api call
     return of(null).pipe(mergeMap(() => {
         // Wizard
@@ -169,7 +169,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
       // }
 
         // // authenticate
-        if (request.url.indexOf('auth/_tokeninfooo') > -1 && request.method === 'GET') {
+        if (request.url.indexOf('auth/_tokeninfo') > -1 && request.method === 'GET') {
             let body: any = {
                 userDetails: {
                     userId: 'xyz@nist.gov',
