@@ -1,7 +1,5 @@
 import { HttpClient } from '@angular/common/http';
 import { Inject, Injectable, PLATFORM_ID } from '@angular/core';
-import environment from '../../../assets/environment.json';
-import { isPlatformBrowser } from '@angular/common';
 // import process from 'process';
 
 declare var require: any
@@ -30,49 +28,24 @@ export class AppConfig {
     ) { }
 
     loadAppConfig() {
-        if (isPlatformBrowser(this.platformId)) {
-
-            // set this.envVariables to be the full URL for retrieving
-            // configuration.  Normal rules of relative URLs are applied.    
-            let baseurl = null;
-            if (this.envVariables.startsWith("/")) {
-                baseurl = location.origin;
-            }
-            else {
-                baseurl = location.href.replace(/#.*$/, "");
-                if (! this.envVariables.endsWith("/"))
-                    baseurl = baseurl.replace(/\/[^\/]+$/, "/");
-            }
-            this.envVariables = baseurl + this.envVariables;
-        //   console.log("Retrieving configuration from "+this.envVariables);
-            
-            this.confCall = this.http.get(this.envVariables)
-            .toPromise()
-            .then(
-                resp => {
+        this.confCall = this.http.get(this.envVariables)
+        .toPromise()
+        .then(
+            resp => {
+                console.log("Wizard load config returns:", resp);
                 // resp as Config;
                 this.confValues.MIDASAPI = (resp as Config)['MIDASAPI'];
                 this.confValues.LANDING = (resp as Config)['LANDING'];
                 this.confValues.PDRAPI = (resp as Config)['PDRAPI'];
                 this.confValues.GACODE = (resp as Config)['GACODE'];
                 this.confValues.APPVERSION = (resp as Config)['APPVERSION'];
-                // console.log("In Browser read environment variables: " + JSON.stringify(this.confValues));
-                },
-                err => {
-                console.log("ERROR IN CONFIG :" + JSON.stringify(err));
-                }
-            );
-            return this.confCall;
-        } else {
-
-            this.appConfig = <any>environment;
-            this.confValues.MIDASAPI = process.env['MIDASAPI'] || this.appConfig.MIDASAPI;
-            this.confValues.LANDING = process.env['LANDING'] || this.appConfig.LANDING;
-            this.confValues.PDRAPI = process.env['PDRAPI'] || this.appConfig.PDRAPI;
-            this.confValues.GACODE = process.env['GACODE'] || this.appConfig.GACODE;
-            this.confValues.APPVERSION = process.env['APPVERSION'] || this.appConfig.APPVERSION;
-            console.log(" ****** In server: " + JSON.stringify(this.confValues));
-        }
+                console.log("In Browser read environment variables: " + JSON.stringify(this.confValues));
+            },
+            err => {
+            console.log("ERROR IN CONFIG :" + JSON.stringify(err));
+            }
+        );
+        return this.confCall;
     }
 
     getConfig() {
