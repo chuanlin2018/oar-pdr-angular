@@ -1,25 +1,48 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { AssociatedPapersComponent } from './associated-papers.component';
+import { WizardModule } from 'oarng';
+import { OARngModule } from 'oarng';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { FormBuilder, FormGroupDirective, ReactiveFormsModule} from "@angular/forms";
 
 describe('AssociatedPapersComponent', () => {
-  let component: AssociatedPapersComponent;
-  let fixture: ComponentFixture<AssociatedPapersComponent>;
+    let component: AssociatedPapersComponent;
+    let fixture: ComponentFixture<AssociatedPapersComponent>;
+    const formBuilder: FormBuilder = new FormBuilder();
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ AssociatedPapersComponent ]
-    })
-    .compileComponents();
-  });
+    beforeEach(waitForAsync(() => {
+        const fb = new FormBuilder()
+        const formGroupDirective = new FormGroupDirective([], []);
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(AssociatedPapersComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        formGroupDirective.form = fb.group({
+            test: fb.control(null)
+        });
+        
+        TestBed.configureTestingModule({
+            declarations: [ AssociatedPapersComponent ],
+            imports: [
+                WizardModule,
+                OARngModule,
+                HttpClientTestingModule,
+                ReactiveFormsModule
+            ],
+            providers: [
+                FormGroupDirective,
+                FormBuilder,
+                { provide: FormBuilder, useValue: formBuilder },
+                {provide: FormGroupDirective, useValue: formGroupDirective}
+            ]
+        })
+        .compileComponents();
+    }));
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(AssociatedPapersComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

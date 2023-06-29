@@ -1,16 +1,29 @@
-import { TestBed } from '@angular/core/testing';
-
+import { TestBed, waitForAsync } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { WizardService } from './wizard.service';
 
 describe('WizardService', () => {
-  let service: WizardService;
+    let service: WizardService;
 
-  beforeEach(() => {
-    TestBed.configureTestingModule({});
-    service = TestBed.inject(WizardService);
-  });
+    beforeEach(waitForAsync(() => {
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
-  });
+        TestBed.configureTestingModule({
+            imports: [
+                HttpClientTestingModule
+            ],
+            providers: [
+
+            ]
+        })
+        .compileComponents();
+    }));
+
+    beforeEach(() => {
+        TestBed.configureTestingModule({});
+        service = TestBed.inject(WizardService);
+    });
+
+    it('should be created', () => {
+        expect(service).toBeTruthy();
+    });
 });

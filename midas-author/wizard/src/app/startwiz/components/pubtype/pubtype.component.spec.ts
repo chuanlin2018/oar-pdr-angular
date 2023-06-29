@@ -1,25 +1,65 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { PubtypeComponent } from './pubtype.component';
+import { WizardModule } from 'oarng';
+import { OARngModule } from 'oarng';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { FormBuilder, FormGroupDirective, ReactiveFormsModule} from "@angular/forms";
+import { NoopAnimationsModule } from '@angular/platform-browser/animations';
 
 describe('PubtypeComponent', () => {
-  let component: PubtypeComponent;
-  let fixture: ComponentFixture<PubtypeComponent>;
+    let component: PubtypeComponent;
+    let fixture: ComponentFixture<PubtypeComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ PubtypeComponent ]
-    })
-    .compileComponents();
-  });
+    beforeEach(waitForAsync(() => {
+        const fb = new FormBuilder()
+        const formGroupDirective = new FormGroupDirective([], []);
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(PubtypeComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+        formGroupDirective.form = fb.group({
+            'pubtype': fb.group({
+                resourceType: [""]
+            }),
+            'softwareInfo': fb.group({
+                provideLink: [false],
+                softwareLink: [""]
+            }),
+            'contactInfo': fb.group({
+                creatorIsContact: [true],
+                contactName: [""]
+            }),
+            'files': fb.group({
+                willUpload: [true]
+            }),
+            'assocPapers': fb.group({
+                assocPageType: [""]
+            })
+        });
+        
+        TestBed.configureTestingModule({
+            declarations: [ PubtypeComponent ],
+            imports: [
+                WizardModule,
+                OARngModule,
+                HttpClientTestingModule,
+                ReactiveFormsModule,
+                NoopAnimationsModule
+            ],
+            providers: [
+                FormGroupDirective,
+                FormBuilder,
+                { provide: FormBuilder, useValue: FormBuilder },
+                { provide: FormGroupDirective, useValue: formGroupDirective }
+            ]
+        })
+        .compileComponents();
+    }));
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+    beforeEach(() => {
+        fixture = TestBed.createComponent(PubtypeComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });

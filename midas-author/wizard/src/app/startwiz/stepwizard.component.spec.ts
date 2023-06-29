@@ -1,25 +1,55 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing';
-
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 import { StepWizardComponent } from './stepwizard.component';
+import { WizardModule } from 'oarng';
+import { OARngModule } from 'oarng';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { FormBuilder, FormGroupDirective, ReactiveFormsModule} from "@angular/forms";
+import { RouterTestingModule } from "@angular/router/testing";
+import { ActivatedRoute, Router, Routes } from '@angular/router';
 
 describe('WizardComponent', () => {
-  let component: StepWizardComponent;
-  let fixture: ComponentFixture<StepWizardComponent>;
+    const formBuilder: FormBuilder = new FormBuilder();
+    let component: StepWizardComponent;
+    let fixture: ComponentFixture<StepWizardComponent>;
 
-  beforeEach(async () => {
-    await TestBed.configureTestingModule({
-      declarations: [ StepWizardComponent ]
-    })
-    .compileComponents();
-  });
+    let routes : Routes = [
+        { path: '', component: StepWizardComponent }
+    ];
 
-  beforeEach(() => {
-    fixture = TestBed.createComponent(StepWizardComponent);
-    component = fixture.componentInstance;
-    fixture.detectChanges();
-  });
+    beforeEach(waitForAsync(() => {
+        const fb = new FormBuilder()
+        const formGroupDirective = new FormGroupDirective([], []);
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+        formGroupDirective.form = fb.group({
+            test: fb.control(null)
+        });
+
+        TestBed.configureTestingModule({
+            declarations: [ StepWizardComponent ],
+            imports: [
+                WizardModule,
+                OARngModule,
+                HttpClientTestingModule,
+                ReactiveFormsModule,
+                RouterTestingModule.withRoutes(routes), 
+            ],
+            providers: [
+                FormGroupDirective,
+                FormBuilder,
+                { provide: FormBuilder, useValue: formBuilder },
+                {provide: FormGroupDirective, useValue: formGroupDirective}
+            ]
+        })
+        .compileComponents();
+    }));
+
+    beforeEach(() => {
+        fixture = TestBed.createComponent(StepWizardComponent);
+        component = fixture.componentInstance;
+        fixture.detectChanges();
+    });
+
+    it('should create', () => {
+        expect(component).toBeTruthy();
+    });
 });
