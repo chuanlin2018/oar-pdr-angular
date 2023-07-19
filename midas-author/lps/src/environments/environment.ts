@@ -215,11 +215,13 @@ export const testdata: {} = {
             "006:045"
         ],
         "_updateDetails": [{
-            "_userDetails": { "userId": "dsn1", "userName": "Deoyani", "userLastName": "Nandrekar Heinis", "userEmail": "deoyani.nandrekarheinis@nist.gov" },
+            "userId": "dsn1",
+            "_userDetails": {"userName": "Deoyani", "userLastName": "Nandrekar Heinis", "userEmail": "deoyani.nandrekarheinis@nist.gov" },
             "_updateDate": "2019-12-03T15:50:32.490+0000"
         },
         {
-            "_userDetails": { "userId": "dsn1", "userName": "Deoyani", "userLastName": "Nandrekar Heinis", "userEmail": "deoyani.nandrekarheinis@nist.gov" },
+            "userId": "dsn1",
+            "_userDetails": { "userName": "Deoyani", "userLastName": "Nandrekar Heinis", "userEmail": "deoyani.nandrekarheinis@nist.gov" },
             "_updateDate": "2019-12-03T15:50:53.208+0000"
         }
         ]

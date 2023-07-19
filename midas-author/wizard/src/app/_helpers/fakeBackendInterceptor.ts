@@ -172,35 +172,50 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         if (request.url.indexOf('auth/_tokeninfo') > -1 && request.method === 'GET') {
             let body: any = {
                 userDetails: {
-                    userId: 'xyz@nist.gov',
+                    userId: 'xyz1@nist.gov',
                     userName: 'xyz',
-                    userLastName: 'Doe',
-                    userEmail: 'xyz@nist.gov',
-                    userGroup: 'Domain Users',
-                    userDiv: 'Office of Data and Informatics',
-                    userDivNum: '641',
-                    userOU: 'Material Measurement Laboratory'
+                    userLastName: 'anon',
+                    userEmail: "anon@email.com"
                 },
                 token: 'fake-jwt-token'
             };
-            console.log("logging in...");
-
-            //Authorized
+            console.log("logging in...")
             return of(new HttpResponse({ status: 200, body }));
-
-            // Athenticated but not authorized
-            // body.token = null;
-            // return of(new HttpResponse({ status: 200, body }));
-
-            // Reject
-            // return throwError(
-            //   JSON.stringify({
-            //       "status": 401,
-            //       "Userid": "xyz@nist.gov",
-            //       "message": "Unauthorizeduser: User token is empty or expired."
-            //   })
-            // );
         }
+
+        // // authenticate
+        // if (request.url.indexOf('auth/_tokeninfo') > -1 && request.method === 'GET') {
+        //     let body: any = {
+        //         userId: 'xyz@nist.gov',
+        //         userAttributes: {
+        //             userName: 'xyz',
+        //             userLastName: 'Doe',
+        //             userEmail: 'xyz@nist.gov',
+        //             userGroup: 'Domain Users',
+        //             userDiv: 'Office of Data and Informatics',
+        //             userDivNum: '641',
+        //             userOU: 'Material Measurement Laboratory'
+        //         },
+        //         token: 'fake-jwt-token'
+        //     };
+        //     console.log("logging in...");
+
+        //     //Authorized
+        //     return of(new HttpResponse({ status: 200, body }));
+
+        //     // Athenticated but not authorized
+        //     // body.token = null;
+        //     // return of(new HttpResponse({ status: 200, body }));
+
+        //     // Reject
+        //     // return throwError(
+        //     //   JSON.stringify({
+        //     //       "status": 401,
+        //     //       "Userid": "xyz@nist.gov",
+        //     //       "message": "Unauthorizeduser: User token is empty or expired."
+        //     //   })
+        //     // );
+        // }
 
       // if (request.url.indexOf('/customization/api/draft') > -1 && request.method === 'GET') {
       //     console.log("Interceptor returning sample record...");

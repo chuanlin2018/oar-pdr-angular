@@ -13,7 +13,7 @@ import { OverlayPanelModule } from 'primeng/overlaypanel';
 import { IEnvironment } from '../../../environments/ienvironment';
 import { environment } from '../../../environments/environment-impl';
 import { TooltipModule } from 'primeng/tooltip';
-import { LibWebAuthService, AuthInfo } from 'oarng';
+import { AuthenticationService } from 'oarng';
 
 @NgModule({
     declarations: [ EditControlComponent, EditStatusComponent ],
@@ -21,8 +21,7 @@ import { LibWebAuthService, AuthInfo } from 'oarng';
     exports: [ EditControlComponent, EditStatusComponent ],
     providers: [
         HttpClient,
-        LibWebAuthService,
-        { provide: AuthService, useFactory: createAuthService, deps: [ environment, AppConfig, HttpClient, LibWebAuthService ] }
+        { provide: AuthService, useFactory: createAuthService, deps: [ environment, AppConfig, HttpClient, AuthenticationService ] }
     ]
 })
 export class EditControlModule { 

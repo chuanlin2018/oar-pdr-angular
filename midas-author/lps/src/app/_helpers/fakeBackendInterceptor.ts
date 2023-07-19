@@ -20,7 +20,7 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         return s;
     }
 
-    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
+    intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any> > {
         // array in local storage for registered users
 
         // const sampleData: any = require('../../assets/science-theme/BiometricsScienceTheme.json');
@@ -149,13 +149,36 @@ export class FakeBackendInterceptor implements HttpInterceptor {
         //     let body: any = {
         //         userDetails: {
         //             userId: 'xyz@nist.gov',
-        //             userName: 'xyz'
+        //             userName: 'xyz',
+        //             userLastName: 'anon',
+        //             userEmail: "anon@email.com"
         //         },
         //         token: 'fake-jwt-token'
         //     };
         //     console.log("logging in...")
         //     return of(new HttpResponse({ status: 200, body }));
         // }
+
+        // return 401 not authorised if token is null or invalid
+        if (request.url.indexOf('auth/_tokeninfo') > -1 && request.method === 'GET') {
+            // let body: ApiToken = {
+            //     userId: '1234',
+            //     token: 'fake-jwt-token'
+            // };
+            console.log("Returning 401 ...")
+            throw new HttpErrorResponse(
+                    {"status": 401}
+            );
+
+
+            // return throwError(
+            //     JSON.stringify({
+            //         "status": 401,
+            //         "Userid": "xyz@nist.gov",
+            //         "message": "Unauthorizeduser: User token is empty or expired."
+            //     })
+            // );
+        }
 
         // midas test data
         // if (request.url.indexOf('midas/dap/mdsx/test1') > -1 && request.method === 'GET') {

@@ -4,16 +4,30 @@ import { DataModel } from './models/data.model';
 import { StepService } from './services/step.service';
 import { Subscription } from 'rxjs';
 import { FormControl, FormGroup, Validators, FormBuilder, FormGroupDirective} from '@angular/forms';
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { WizardService } from './services/wizard.service';
 import { AppConfig, Config } from './services/config-service.service';
-import { UserDetails, deepCopy, AuthInfo, LibWebAuthService } from 'oarng';
+import { AuthenticationService, Credentials } from 'oarng';
+import { catchError, filter, finalize, pluck, switchMap, tap, map } from 'rxjs/operators';
+import { Observable, EMPTY, throwError } from 'rxjs';
 
 export class AuthStatus {
     static readonly AUTHORIZED = 'Authorized';
     static readonly AUTHENTICATED = 'Authenticated';
     static readonly NOTLOGIN = 'NotLoggedIn';
     static readonly AUTHORIZING = 'Authorizing';
+}
+
+/**
+ * A specialized Error indicating a error originating with from client action/inaction; the 
+ * message is assumed to be one directed at the user (rather than the programmer) and can be 
+ * displayed in the application in some way.
+ */
+class ClientError extends Error {
+    constructor(msg: string) {
+      super(msg);
+      Object.setPrototypeOf(this, ClientError.prototype);
+    }
 }
 
 @Component({
@@ -41,13 +55,16 @@ export class StepWizardComponent implements OnInit {
     resid: string = "Wizard";
     authMessage: string = "Authorizing...";
 
+    _creds: Credentials|null = null;
+
     constructor(private stepService: StepService,
                 private fb: FormBuilder, 
                 private cdr: ChangeDetectorRef,
                 private router: Router,
                 private wizardService: WizardService,
-                public libWebAuthService: LibWebAuthService,
-                private appConfig: AppConfig) { 
+                private appConfig: AppConfig,
+                private route: ActivatedRoute,
+                private authService: AuthenticationService) { 
 
             this.confValues = this.appConfig.getConfig();
             this.PDRAPI = this.confValues.PDRAPI;
@@ -77,10 +94,11 @@ export class StepWizardComponent implements OnInit {
      * 
      */
     authorizeEditing() {
-        this.libWebAuthService.getAuthInfo().subscribe({
-            next: (info) =>{
-                if (info && info.token) {
-                    this.wizardService.setToken(info.token);
+        this.authService.getCredentials().subscribe({
+            next: (creds) =>{
+                if (creds && creds.token) {
+                    this._creds = creds;
+                    this.wizardService.setToken(creds.token);
                     this.authStatus = AuthStatus.AUTHORIZED;
 
                     this.reset();
@@ -91,7 +109,7 @@ export class StepWizardComponent implements OnInit {
             
                     this.bodyHeight = window.innerHeight - 150;
                 }
-                else if (info && info.userDetails && info.userDetails.userId) {
+                else if (creds && creds.userAttributes && creds.userId) {
                     // the user is authenticated but not authorized
                     this.authStatus = AuthStatus.AUTHENTICATED;
                 }
@@ -105,6 +123,29 @@ export class StepWizardComponent implements OnInit {
                 this.authMessage = err['message'];
             }
         })
+    }
+
+    /**
+     * ensure that the user is authenticated.  The returned Observable won't provide a value until 
+     * authentication process completes successfully.
+     * @return Observable<string> -- an Observable to the ID of the request to be approved
+     *                  authentication is complete.  
+     */
+    authenticate() : Observable<string> {
+        return this.authService.getCredentials().pipe(
+            // cache the credentials
+            tap(c => this._creds = c),
+
+            // get the requested record ID
+            switchMap(c => this.route.queryParams),
+            map(params => {
+                if (!this._creds || !this._creds.token)
+                    throwError(new ClientError("Authentication failed.  (Try reloading this URL.)"));
+                if (!params['id'])
+                    throwError(new ClientError("No request identifier provided!"))
+                return params['id']
+            })
+        );
     }
 
     formGroupReset() {

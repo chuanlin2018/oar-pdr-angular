@@ -11,6 +11,7 @@ import { AuthService, WebAuthService } from './auth.service';
 import { LandingConstants } from '../constants';
 import { EditStatusService } from './editstatus.service';
 import { UniqueSelectionDispatcher } from '@angular/cdk/collections';
+import { AuthenticationService, Credentials, UserAttributes } from 'oarng';
 
 /**
  * a service that receives updates to the resource metadata from update widgets.
@@ -219,15 +220,6 @@ export class MetadataUpdateService {
                     console.log("Return obj from add", res);
                     // let obj = JSON.parse(res as string);
                     let obj = res as Object[];
-                    // if(subsetname) {  //Add a subset
-                    //     if(this.currentRec[subsetname]){
-                    //         this.currentRec[subsetname] = [...this.currentRec[subsetname], ...[obj]];
-                    //     }else{
-                    //         this.currentRec[subsetname] = [obj];
-                    //     }
-                    // } else {  // Add a record
-                    //     this.currentRec = JSON.parse(JSON.stringify(obj));
-                    // }
                     this.currentRec[subsetname] = JSON.parse(JSON.stringify(res));
 
                     obj.forEach(sub => {
@@ -235,9 +227,6 @@ export class MetadataUpdateService {
                         this.origfields[key] = {};
                         this.origfields[key][subsetname] = JSON.parse(JSON.stringify(this.currentRec[subsetname]));
                     })
-                    // let key = subsetname + obj['@id'];
-                    // this.origfields[key] = {};
-                    // this.origfields[key][subsetname] = JSON.parse(JSON.stringify(this.currentRec[subsetname]));
 
                     this.mdres.next(JSON.parse(JSON.stringify(this.currentRec)) as NerdmRes);
                     // resolve(true);
@@ -329,26 +318,6 @@ export class MetadataUpdateService {
                         resolve(false);
                     }
                 )
-
-                // this.custsvc.discardDraft().subscribe(
-                //     (res) => {
-                //         resolve(true);
-                //     },
-                //     (err) => {
-                //         // err will be a subtype of CustomizationError
-                //         if (err.type == 'user') {
-                //             console.error("Failed to undo metadata changes: user error:" + err.message);
-                //             this.msgsvc.error(err.message)
-                //         }
-                //         else {
-                //             console.error("Failed to undo metadata changes: server/system error:" +
-                //                 err.message);
-                //             this.msgsvc.syserror(err.message,
-                //                 "There was an problem while undoing changes to the " + subsetname + ". ")
-                //         }
-                //         resolve(false);
-                //     }
-                // );
             });
         }
         else {
@@ -443,7 +412,7 @@ export class MetadataUpdateService {
             newdate = new Date(mdrec._updateDetails[mdrec._updateDetails.length - 1]._updateDate);
 
             this.lastUpdate = {
-                'userDetails': this.authsvc.userDetails,
+                'userAttributes': this.authsvc.userAttributes,
                 '_updateDate': newdate.toLocaleString()
             }
         } else {
@@ -621,7 +590,7 @@ export class MetadataUpdateService {
      */
     public stampUpdateDate(): UpdateDetails {
         this.lastUpdate = {
-            'userDetails': this.authsvc.userDetails,
+            'userAttributes': this.authsvc.userAttributes,
             '_updateDate': this.datePipe.transform(new Date(), "MMM d, y, h:mm:ss a")
         }
         return this.lastUpdate;
