@@ -1,7 +1,7 @@
 {
-    "MIDASAPI":  "https://localhost:9091/midas/",
-    "PDRAPI":  "https://localhost:9091/dapui/edit/od/id/",
-    "LANDING": "http://localhost:9091/rmm/",
+    "MIDASAPI":  "https://localhost/midas/",
+    "PDRAPI":  "https://localhost/dapui/edit/od/id/",
+    "LANDING": "https://localhost/rmm/",
     "GACODE": "not-set",
     "APPVERSION": "1.3.0",
     "AUTHAPI": "https://localhost/sso/",
