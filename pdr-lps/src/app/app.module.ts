@@ -7,7 +7,7 @@ import {
 import { enableProdMode } from '@angular/core';
 import { ErrorHandler } from '@angular/core';
 
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClientModule} from '@angular/common/http';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { isPlatformBrowser, CommonModule } from '@angular/common';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
@@ -34,18 +34,19 @@ import { MetricsModule } from 'oarlps';
 import { ModalComponent } from 'oarlps';
 import { ComboBoxComponent } from 'oarlps';
 import { SearchTopicsComponent } from 'oarlps';
-import { DescriptionPopupComponent } from 'oarlps';
-import { AuthorPopupComponent } from 'oarlps';
-import { ContactPopupComponent } from 'oarlps';
 import { GoogleAnalyticsService} from "oarlps";
-// import { fakeBackendProvider } from './_helpers/fakeBackendInterceptor';
+import { fakeBackendProvider } from './_helpers/fakeBackendInterceptor';
 
-import { FrameModule } from 'oarng';
+// import { FrameModule } from 'oarlps';
 import { OARLPSModule } from 'oarlps';
 import { environment } from '../environments/environment-impl';
 import { NerdmModule } from 'oarlps';
 import { ConfigModule } from 'oarlps';
 import { EditControlModule } from 'oarlps';
+
+import { OARngModule } from 'oarng';
+import { FrameModule } from 'oarng';
+import { WizardModule } from 'oarng';
 
 enableProdMode();
 
@@ -60,6 +61,7 @@ enableProdMode();
         // ConfigModule,
         FrameModule,
         OARLPSModule,
+        WizardModule,
         ErrorsModule,
         LandingPageModule,
         AppRoutingModule,
@@ -86,7 +88,8 @@ enableProdMode();
         AppErrorHandler,
         { provide: ErrorHandler, useClass: AppErrorHandler },
         GoogleAnalyticsService,
-        DatePipe
+        DatePipe,
+        fakeBackendProvider
     ],
     schemas: [CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA]
 })

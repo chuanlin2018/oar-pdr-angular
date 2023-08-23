@@ -5,6 +5,8 @@ import { NerdmRes, NERDResource } from 'oarlps';
 import { ResourceMetadataComponent } from 'oarlps';
 import { Console } from 'console';
 import { MetricsData } from "./metrics-data";
+import { MetadataUpdateService } from 'oarlps';
+import { Globals } from 'oarlps';
 
 /**
  * a component that presents the landing page's presentation of the resource description
@@ -32,7 +34,7 @@ import { MetricsData } from "./metrics-data";
     selector:    'pdr-landing-body',
     templateUrl: './landingbody.component.html',
     styleUrls:   [
-        './landing.component.scss'
+        './landing.component.css'
     ]
 })
 export class LandingBodyComponent {
@@ -63,7 +65,7 @@ export class LandingBodyComponent {
     /**
      * create an instance of the Identity section
      */
-    constructor(private cfg: AppConfig)
+    constructor(private cfg: AppConfig, public mdupdsvc : MetadataUpdateService)
     { }
 
     ngOnInit(): void {
@@ -74,23 +76,27 @@ export class LandingBodyComponent {
      * "dataAccess", "references", and "metadata".  Any other value will be treated as "top".  
      * (Note that the "references" section may be omitted if there are no references to be displayed.)
      */
-    goToSection(sectionId) {
-        if(sectionId == null) sectionId = "top";
+    goToSection(sectionID) {
+        if(!sectionID) sectionID = "top";
 
-        switch(sectionId) { 
-            case "description": { 
+        switch(sectionID) { 
+            case Globals.SectionPrefs.getFieldName(Globals.Sections.DESCRIPTION): { 
                 this.description.nativeElement.scrollIntoView({behavior: 'smooth'}); 
                break; 
             } 
-            case "dataAccess": { 
+            case Globals.SectionPrefs.getFieldName(Globals.Sections.KEYWORDS): { 
+                this.description.nativeElement.scrollIntoView({behavior: 'smooth'}); 
+               break; 
+            } 
+            case Globals.SectionPrefs.getFieldName(Globals.Sections.DATA_ACCESS): { 
                 this.dataAccess.nativeElement.scrollIntoView({behavior: 'smooth'}); 
                break; 
             } 
-            case "references": {
+            case Globals.SectionPrefs.getFieldName(Globals.Sections.REFERENCES): {
                 this.references.nativeElement.scrollIntoView({behavior: 'smooth'}); 
                 break;
             }
-            case "about": {
+            case Globals.SectionPrefs.getFieldName(Globals.Sections.ABOUT): {
                 this.about.nativeElement.scrollIntoView({behavior: 'smooth'}); 
                 break;
             }

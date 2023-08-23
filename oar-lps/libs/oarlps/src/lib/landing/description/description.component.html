@@ -33,15 +33,15 @@
             <div class="editable_field" *ngIf="mdupdsvc.isEditMode" style="white-space: nowrap;">
                 <!-- Edit button -->
                 <!-- <button class="edit_button" type="button" (click)="startEditing()" *ngIf="!isEditing"
-                    aria-label="edit button" ngbTooltip="edit keywords">
-                    <i class="faa faa-pencil icon_enabled" data-toggle="tooltip" title="Edit keywords"></i>
+                    aria-label="edit button" ngbTooltip="edit description">
+                    <i class="faa faa-pencil icon_enabled" data-toggle="tooltip" title="Edit description"></i>
                 </button> -->
-                <i class="faa faa-pencil icon_enabled link-icon" (click)="startEditing()" *ngIf="!isEditing" title="Edit keywords" ngbTooltip="edit keywords" aria-label="edit keywords" style="cursor: pointer;"></i>
+                <i class="faa faa-pencil icon_enabled link-icon" (click)="startEditing()" *ngIf="!isEditing" title="Edit description" ngbTooltip="edit description" aria-label="edit description" style="cursor: pointer;"></i>
 
                 <!-- Save button -->
                 <button class="edit_button" type="button" (click)="onSave()" *ngIf="isEditing"
                 aria-label="save button" ngbTooltip="Save changes">
-                    <i class="faa faa-check icon_enabled" data-toggle="tooltip" title="Save keywords"></i>
+                    <i class="faa faa-check icon_enabled" data-toggle="tooltip" title="Save description"></i>
                 </button>
     
                 <!-- Cancel editing button -->
@@ -52,9 +52,9 @@
 
                 <!-- Undo button: restore original value -->
                 <button class="edit_button" type="button" *ngIf="isEditing"
-                    (click)="undoEditing()" aria-label="undo button" ngbTooltip="Restore original keywords">
+                    (click)="undoEditing()" aria-label="undo button" ngbTooltip="Restore original description">
                     <i class="faa faa-undo" [ngClass]="{'icon_enabled': updated, 'icon_disabled':!updated }"
-                        data-toggle="tooltip" title="Undo keyword changes"></i>
+                        data-toggle="tooltip" title="Undo description changes"></i>
                 </button>                
             </div>
         </div>

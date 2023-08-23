@@ -1,5 +1,5 @@
 import {
-    Component, OnInit, AfterViewInit, ViewChild,
+    Component, OnInit, AfterViewInit, ViewChild, ChangeDetectorRef,
     PLATFORM_ID, Inject, ViewEncapsulation, HostListener, ElementRef
 } from '@angular/core';
 import { ActivatedRoute, Router, NavigationEnd } from '@angular/router';
@@ -27,6 +27,10 @@ import { CartActions } from 'oarlps';
 // import { initBrowserMetadataTransfer } from 'oarlps';
 import { MetricsData } from "oarlps";
 import { Themes, ThemesPrefs } from 'oarlps';
+import { state, style, trigger, transition, animate } from '@angular/animations';
+import { LandingpageService } from 'oarlps';
+import questionhelp from '../../assets/site-constants/question-help.json';
+import wordMapping from '../../assets/site-constants/word-mapping.json';
 
 /**
  * A component providing the complete display of landing page content associated with 
@@ -49,13 +53,44 @@ import { Themes, ThemesPrefs } from 'oarlps';
     providers: [
         Title
     ],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.None,
+    animations: [
+        trigger("togglemain", [
+            state('mainsquished', style({
+                "width": "75%"
+            })),
+            state('mainexpanded', style({
+                "width": "95%"
+            })),
+            state('mainfullyexpanded', style({
+                "width": "100%"
+            })),
+            transition('mainsquished <=> mainexpanded', [
+                animate('.5s cubic-bezier(0.4, 0.0, 0.2, 1)')
+            ])
+        ]),
+        trigger("togglesbar", [
+            state('mainsquished', style({
+                "width": "22%"
+            })),
+            state('mainexpanded', style({
+                "width": "15px"
+            })),
+            state('mainfullyexpanded', style({
+                "width": "0%"
+            })),
+            transition('mainsquished <=> mainexpanded', [
+                animate('.5s cubic-bezier(0.4, 0.0, 0.2, 1)')
+            ])
+        ])
+    ]
 })
 export class LandingPageComponent implements OnInit, AfterViewInit {
     layoutCompact: boolean = true;
     layoutMode: string = 'horizontal';
     profileMode: string = 'inline';
     md: NerdmRes = null;       // the NERDm resource metadata
+    midasRecord: any = null;    // the new Midas record metadata
     reqId: string;             // the ID that was used to request this page
     inBrowser: boolean = false;
     citetext: string = null;
@@ -91,13 +126,31 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
     windowScrolled: boolean = false;
     btnPosition: number = 20;
     menuPosition: number = 20;
-    menuBottom: string = "1em";
+    // menuBottom: string = "1em";
     showMetrics: boolean = false;
     recordType: string = "";
     imageURL: string;
     theme: string;
     scienceTheme = Themes.SCIENCE_THEME;
     defaultTheme = Themes.DEFAULT_THEME;
+    hideToolMenu: boolean = false;
+
+    private _sbarvisible : boolean = true;
+    sidebarVisible: boolean = true;
+    mainBodyStatus: string = "mainsquished";
+    sidebarStartY: number = 100;
+    sidebarY: number = 100;
+
+    // helpContent: any = {
+    //     "title": "<p>With this question, you are telling us the <i>type</i> of product you are publishing. Your publication may present multiple types of products--for example, data plus software to analyze it--but, it is helpful for us to know what you consider is the most important product. And don't worry: you can change this later. <p> <i>[Helpful examples, links to policy and guideance]</i>", "description": "Placeholder for description editing help."
+    // }
+
+    wordMpping: any = wordMapping;
+    resourceType: string = "resource";
+
+    suggustedSections: string[] = ["title", "keyword", "references"];
+    public helpContentAll:{} = questionhelp;
+    helpContentUpdated: boolean = false;
 
     @ViewChild(LandingBodyComponent)
     landingBodyComponent: LandingBodyComponent;
@@ -129,13 +182,19 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
                 private cartService: CartService,
                 private mdupdsvc: MetadataUpdateService,
                 public metricsService: MetricsService,
-                public breakpointObserver: BreakpointObserver) 
+                public breakpointObserver: BreakpointObserver,
+                private chref: ChangeDetectorRef,
+                public lpService: LandingpageService) 
     {
         this.reqId = this.route.snapshot.paramMap.get('id');
         this.inBrowser = isPlatformBrowser(platformId);
         this.editEnabled = cfg.get('editEnabled', false) as boolean;
         this.editMode = this.EDIT_MODES.VIEWONLY_MODE;
         this.delayTimeForMetricsRefresh = +this.cfg.get("delayTimeForMetricsRefresh", "300");
+
+        this.lpService.watchCurrentSection((currentSection) => {
+            this.goToSection(currentSection);
+        });
 
         if (this.editEnabled) {
             this.edstatsvc.watchEditMode((editMode) => {
@@ -147,12 +206,19 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
                     this._showContent = true;
                     this.setMessage();
                 }
+                
+                this.hideToolMenu = (this.editMode == this.EDIT_MODES.EDIT_MODE);
             });
 
             this.mdupdsvc.subscribe(
                 (md) => {
-                    if (md && md != this.md) 
+                    if (md && md != this.md) {
                         this.md = md as NerdmRes;
+                    }
+
+                    if(md && !this.helpContentUpdated){
+                        this.updateHelpContent();
+                    }
 
                     this.showData();
                 }
@@ -211,6 +277,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
         (data) => {
             // successful metadata request
             this.md = data;
+            // this.midasRecord = data;
 
             if (!this.md) {
                 // id not found; reroute
@@ -225,8 +292,11 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
                         this.metricsData.hasCurrentMetrics = false;
                         this.showMetrics = true;
                     }else{
-                        if(this.theme == Themes.DEFAULT_THEME)
+                        if(this.theme == Themes.DEFAULT_THEME){
+                            console.log("Getting metrics...");
                             this.getMetrics();
+                        }
+                            
                     }
                 }
 
@@ -287,11 +357,35 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
     }
 
     /**
+     * Update help content
+     */
+    updateHelpContent() {
+        //Read meta from Midas record
+        this.mdupdsvc.loadMetaData().subscribe( midasrec => {
+            if(midasrec["resourceType"] != undefined) {
+                this.wordMpping["resource"] = midasrec["resourceType"];
+                this.resourceType = midasrec["resourceType"];
+
+                //Broadcast resource type
+                this.lpService.setResourceType(this.resourceType);
+
+                //Update helpContentAll
+                let keys = Object.keys(this.wordMpping);
+                keys.forEach(key => {
+                    this.helpContentAll = JSON.parse(JSON.stringify(this.helpContentAll).replace(new RegExp(key, 'g'), this.wordMpping[key]));
+                })  
+                
+                //Only update help content once
+                this.helpContentUpdated = true;
+            }
+        })
+    }
+
+    /**
      * Get metrics data
      */
      getMetrics() {
         let ediid = this.md.ediid;
-
         this.metricsService.getFileLevelMetrics(ediid).subscribe(async (event) => {
             // Some large dataset might take a while to download. Only handle the response
             // when download is completed
@@ -373,7 +467,9 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
         else
             this.windowScrolled = (window.pageYOffset > this.menuPosition);
 
-        this.menuBottom = (window.pageYOffset).toString() + 'px';
+        this.sidebarY = this.sidebarStartY - window.pageYOffset;
+        // this.sidebarY = this.sidebarY > 10 ? this.sidebarY : 10;
+        this.sidebarY = this.sidebarY < -80 ? -80 : this.sidebarY;
     }
 
     /**
@@ -473,11 +569,11 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
                 if (state.matches) {
                     this.mobileMode = false;
                     if (this.menuElement)
-                        this.menuPosition = this.menuElement.nativeElement.offsetTop + 20;
+                        this.menuPosition = this.menuElement.nativeElement.offsetTop + 10;
                 } else {
                     this.mobileMode = true;
                     if (this.btnElement)
-                        this.btnPosition = this.btnElement.nativeElement.offsetTop + 20;
+                        this.btnPosition = this.btnElement.nativeElement.offsetTop + 10;
                 }
             });
         }
@@ -485,6 +581,10 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
 
     inViewMode() {
         return this.editMode == this.EDIT_MODES.VIEWONLY_MODE;
+    }
+
+    get inEditMode() {
+        return this.editMode == this.EDIT_MODES.EDIT_MODE;
     }
 
     showData() : void{
@@ -508,6 +608,7 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
         // set the document title
         this.setDocumentTitle();
         this.mdupdsvc.setOriginalMetadata(this.md);
+
         this.showData();
     }
 
@@ -567,7 +668,8 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
         if(sectionId == "Metadata") sectionId = "about";
 
         setTimeout(() => {
-            this.landingBodyComponent.goToSection(sectionId);
+            if(this.landingBodyComponent != undefined)
+                this.landingBodyComponent.goToSection(sectionId);
         }, 50);
     }
 
@@ -619,6 +721,32 @@ export class LandingPageComponent implements OnInit, AfterViewInit {
             return "col-12 md:col-12 lg:col-12 sm:flex-nowrap";
         }else{
             "col-10 md:col-10 lg:col-10 sm:flex-nowrap";
+        }
+    }
+
+    /**
+     * toggle whether the sidebar is visible.  When this is called, a change in 
+     * in the visiblity of the sidebar will be animated (either opened or closed).
+     */
+    toggleSbarView() {
+        this._sbarvisible = ! this._sbarvisible;
+        this.chref.detectChanges();
+    }
+
+    isSbarVisible() {
+        return this._sbarvisible
+    }
+
+    updateSidebarStatus(sbarVisible) {
+        this.sidebarVisible = sbarVisible;
+
+        if(this.mobileMode){
+            this.mainBodyStatus = "mainfullyexpanded";
+        }else {
+            if(this.sidebarVisible)
+                this.mainBodyStatus = "mainsquished";
+            else    
+                this.mainBodyStatus = "mainexpanded";
         }
     }
 }
