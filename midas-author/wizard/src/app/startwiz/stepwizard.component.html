@@ -25,13 +25,13 @@
                             </div>
                         </ng-container>
                         <ng-container *ngSwitchCase="'3'">
-                            <div formGroupName="files" class="step-page">
-                                <app-files [dataModel]="dataModel" [steps]="steps"></app-files>
+                            <div formGroupName="softwareInfo" class="step-page">
+                                <app-softwareinfo [dataModel]="dataModel" [steps]="steps"></app-softwareinfo>
                             </div>
                         </ng-container>
                         <ng-container *ngSwitchCase="'4'">
-                            <div formGroupName="softwareInfo" class="step-page">
-                                <app-softwareinfo [dataModel]="dataModel" [steps]="steps"></app-softwareinfo>
+                            <div formGroupName="files" class="step-page">
+                                <app-files [dataModel]="dataModel" [steps]="steps"></app-files>
                             </div>
                         </ng-container>
                         <ng-container *ngSwitchCase="'5'">

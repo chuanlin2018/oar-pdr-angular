@@ -8,6 +8,8 @@
                     Enter a brief name:
                 </div>
                 <input #name class="input input-box" type="text" pInputText name="recordname" (input)="updateRecordName($event)"/>
+                <!-- Turn this feature off for now -->
+                <div *ngIf="textLength > 16000" class="length-warning">This name should be brief--say, 16 characters or less</div>
             </div>
         </div>
         <span class="sidebar-title">Question Help</span>

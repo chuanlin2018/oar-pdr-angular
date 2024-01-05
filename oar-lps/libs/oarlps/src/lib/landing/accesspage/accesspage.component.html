@@ -63,7 +63,7 @@
         <!-- Control buttons -->
         <div class="editable_field" *ngIf="mdupdsvc.isEditMode" style="white-space: nowrap;">
             <!-- Edit button -->
-            <button class="edit_button" *ngIf="isNormal" (click)="startEditing()" aria-label="edit button">
+            <button class="edit_button" *ngIf="isNormal" (click)="startEditing()" aria-label="edit button" ngbTooltip="Edit access page">
                 <i class="fas fa-pencil fa-sm"></i>
             </button>
               
@@ -74,7 +74,7 @@
             </button> 
 
             <!-- Restore original value-->
-            <button *ngIf="!isEditing && updated" class="edit_button" type="button"       (click)="restoreOriginal()" aria-label="undo button" ngbTooltip="Undo changes">
+            <button *ngIf="!isEditing && updated" class="edit_button" type="button"       (click)="restoreOriginal()" aria-label="Undo" ngbTooltip="Undo">
                 <i class="fas fa-undo fa-sm"></i>
             </button>
 

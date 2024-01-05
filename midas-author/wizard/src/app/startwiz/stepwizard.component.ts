@@ -153,8 +153,8 @@ export class StepWizardComponent implements OnInit {
         this.steps = [
             new StepModel(1, 'Publication Type',true,true,false,false),
             new StepModel(2, 'Contact Info',true,false),
-            new StepModel(3, 'Files',true,false),
-            new StepModel(4, 'Software',false,false),
+            new StepModel(3, 'Software',false,false),
+            new StepModel(4, 'Files',true,false),
             new StepModel(5, 'Associated Papers',true,false,false),
             new StepModel(6, 'Name',true,false,false)
         ]
@@ -220,8 +220,8 @@ export class StepWizardComponent implements OnInit {
 
                 // Submit the request, get the id from server response then launch the landing page
                 let url = this.PDRAPI + id + '?editEnabled=true';
-                // window.location.href = url;
-                window.open(url, "_blank");
+                window.open(url);
+                // window.open(url, "_blank");
             },
             error: (err) => {
                 console.error("err", err);

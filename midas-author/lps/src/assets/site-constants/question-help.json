@@ -3,13 +3,13 @@
     "general": "This screen allows you to enter the information for creating your publication.  <p><p>On this page, you can:<ul><li>Click on <i class='fas fa-pencil'></i> next to the item you want to enter or update a piece of information,</li><li>Click the <b>Preview</b> button above to see how this page will look to the public with your changes so far, or </li><li>Click on the <b>Save</b> button above to save the changes to your draft and come back to this later.</li></ul><p><p>Click <i class='fas fa-pencil'></i> to the right of each field to edit",
     "title": {
         "label": "Title",
-        "general": "The title should be written in plain language and include sufficient detail to facilitate search and discovery. <p><p> If this publication can be considered a supplement to a literature publication, consider using the same title with an extra annotation, like ': Supplementary Data'.",
+        "general": "The Title is the name you give this resource. <p><p> Enter a title in plain language with enough detail to aid users when searching for it.  <p><p> If you select a title similar to a related paper, make sure it sufficiently describes the resource as a standalone object.",
         "edit": "Type the title into the input box and then click the <i class='fas fa-check'></i> icon to save.",
         "seealso": "<i>[Helpful examples, <a href='https://data.nist.gov/sdp/#/policy'>links to policy and guidance</a>]</i>"
     },
     "authors": {
         "label": "Authors",
-        "general": "This section should list all authors or collaborators whose work falls under one of the 14 roles listed in the <a href='https://credit.niso.org/'>Credit Contributor Roles Taxonomy</a>. Add affiliations and ORCIDs as available.",
+        "general": "Authors are the creators and collaborators for this resource. <p><p> Enter all authors and collaborators for this work. You may want to refer to one of the 14 roles listed in the <a href='https://credit.niso.org/'>Credit Contributor Roles Taxonomy</a>. Add affiliations and ORCIDs as available.",
         "list": "Click <i class='fas fa-plus'></i> to add authors. Click <i class='fas fa-pencil'></i> to make edits.",
         "add": "Click <i class='fas fa-check'></i> to save.",
         "edit": "Click <i class='fas fa-check'></i> to save changes.<p><i>[Helpful examples, <a href='https://data.nist.gov/sdp/#/policy'>links to policy and guidance</a>]</i>", 
@@ -17,14 +17,14 @@
     },
     "contactPoint": {
         "label": "Contact Point",
-        "general": "Review the name of the NIST contact listed who will respond to questions about this resource. To edit this contact, click <i class='fas fa-pencil'></i>",
+        "general": "The Contact Point is the NIST employee who can respond to customer questions about this resource.<p><p> Select the contact from dropdown list of NIST employees.",
         "add": "<i>[Helpful examples, <a href='https://data.nist.gov/sdp/#/policy'>links to policy and guidance</a>]</i>",
         "edit": "Click <i class='fas fa-check'></i> to save changes. <p><p> <i>[Helpful examples, <a href='https://data.nist.gov/sdp/#/policy'>links to policy and guideance</a>]</i>"
     },
     "landingPage": {
         "label": "Visit Home Page",
-        "general": "The Home Page is the users' entry point for a resource. It provides contextual information and access to the resource itself (i.e. download links for data). Importantly, the DOI (digital object identifier) will point to this URL. <p><p> If you wish for this NIST Public Data Repository page to your Home Page, leave this box blank and click <i class='fas fa-times'></i> to close the entry field. If you would like to point to another home page enter the URL here.",
-      "add": "<i>[Helpful examples, <a href='https://data.nist.gov/sdp/#/policy'>links to policy and guideance</a>]</i>",
+        "general": "The Home Page is the users' entry point for a resource. <p><p> Enter a URL for a site which provides contextual information and access to the resource (e.g. download links). You can leave this box blank if you want the NIST Public Data Repository record to serve as your Home Page.<p><p> Important note: The DOI (digital object identifier) will point to this URL.",
+        "add": "<i>[Helpful examples, <a href='https://data.nist.gov/sdp/#/policy'>links to policy and guideance</a>]</i>",
         "edit": "Enter a working URL for a homepage other than this repository landing page. Click <i class='fas fa-check'></i> to save changes<p><p> <i>[Helpful examples, <a href='https://data.nist.gov/sdp/#/policy'>links to policy and guideance</a>]</i>"
     },
     "doi": {
@@ -33,28 +33,28 @@
     },
     "version": {
         "label": "Version",
-        "general": "Placeholder for version help."
+        "general": "The Versions that appear indicate versions of the publication record. Versions are expressed with three numerical digits.<p><p> The last digit, or digit on the right, indicates the number of changes to the record metadata only. <p><p> The middle digit indicates changes to the data or digital asset itself, e.g. a file change or file addition.<p><p> The first digit, or left digit, indicates a change requested by the author, e.g. a custom number that expresses a specific change the author wishes to describe.<p><p>        Note: to see notation for version changes, click on the plus '+' sign next to the version number."
     },
     "description": {
         "label": "Description",
-        "general": "This field is for a human-readable description of your resource that will enable a user to quickly identify whether it is of interest. You may wish to use part of the abstract of a related publication. Avoid copying the entire abstract if the entirety is not relevant to this discrete resource.",
+        "general": "The Description of the resource enables users to quickly identify whether it is of interest to them. <p><p> Enter informtion that imparts defines and characterizes the resource in enough detail to enable users to determine its usefulness. You may wish to use part of the abstract of a related publication for the description. <p><p> It is best to avoid copying the entire abstract if the entirety is not relevant to this discrete resource.",
         "edit": "Click <i class='fas fa-check'></i> to save. <p><p> <i>[Helpful examples, <a href='https://data.nist.gov/sdp/#/policy'>links to policy and guidance</a>]</i>"
     },
     "theme":{
         "label": "Research Topics",
-        "general": "You are in Research Topics section where you can select topics from the NIST Research Taxonomy. Select one or more topics that apply to this resource",
+        "general": "The Theme is the main category of this resource. <p><p>        Select one or more Themes from the NIST Research Taxonomy that relate to this resource. ",
         "add": "Click <i class='fas fa-pencil'></i> to select topics for this resource. Click on the arrows to view subtopics. Double-click on a topic to select it for your resource. <p><p> <i>[Helpful examples, <a href='https://data.nist.gov/sdp/#/policy'>links to policy and guideance</a>]</i>",
         "edit": "To edit your Research Topics selections, click on <i class='fas fa-pencil'></i>. Double click on topics to add them. Click <i class='fas fa-trash-alt'></i> to the right of topics to delete them.<p><p> <i>[Helpful examples, <a href='https://data.nist.gov/sdp/#/policy'>links to policy and guideance</a>]</i>"
     },
     "keyword": {
         "label": "Keywords",
-        "general": "Add <i>keywords,</i> or subject terms that help both technical and non-technical users to discover this resource. Separate the terms with commas. You may enter up to a maximum of 4,000 characters",
+        "general": "Keywords are tags or terms that help users find your resource.<p><p> Enter terms that would be useful for both technical and non-technical users. Separate the terms with commas. There is a limit of 4000-characters.",
         "add": "Click <i class='fas fa-check'></i> to save.<p><p> <i>[Helpful examples, <a href='https://data.nist.gov/sdp/#/policy'>links to policy and guidance</a>]</i>",
         "edit": "Click <i class='fas fa-pencil'></i> to edit your keywords or enter additional keywords. Separate the terms with commas.<p><p> <i>[Helpful examples, <a href='https://data.nist.gov/sdp/#/policy'>links to policy and guidance</a>]</i>"
     },
     "components": {
         "label": "Access Page",
-        "general": "You are in the Data Access section. Enter URLs for sites with related information on this resource, e.g. a GitHub repository. Each entry requires the URL, the 'Link text' or Title, and information 'About this link' or a description. Note: this area is not for links to files. To upload and link files use the 'Files' button below.",
+        "general": "You are in the Data Access section where you provide links to download the resource or to related sites.<p><p> Enter URLs for sites that are related this resource, e.g. a GitHub repository. Each entry requires the URL, the 'Link text' or Title, and information 'About this link' or a description. <p><p> Note: this area is not for links to files. To upload and link files use the 'Files' button below.",
         "list": "Click <i class='fas fa-plus'></i> to enter URLs to sites with information related to this resource. Click <i class='fas fa-pencil'></i> to make edits.",
         "add": "Separate each URL with a comma. When all URLS are entered, click <i class='fas fa-check'></i> to save.<p> <i>[Helpful examples, <a href='https://data.nist.gov/sdp/#/policy'>links to policy and guideance</a>]</i>",
         "edit": "Separate each URL with a comma. When all URLS are entered, click <i class='fas fa-check'></i> to save.",
@@ -62,7 +62,7 @@
     },
     "references": {
         "label": "References",
-        "general": "You are in <i>References</i> section where you can add references or citations related to this resource. You may wish to include links to multiple types of resources such as a related publication or a software package. <p><p> <i>[Other Helpful examples, <a href='https://data.nist.gov/sdp/#/policy'>links to policy and guidance</a>]</i>",
+        "general": "References point to related documents such as technical information about this resource, developer documentation, a related publication, etc.<p><p>  Enter URLs links to these related resources.",
         "list": "Click <i class='fas fa-plus'></i> to add the URI of a related resource. Click <i class='fas fa-pencil'></i> to make changes to existing References listed here.",
         "add": "Separate each Reference URL with a comma. When all References are entered, click <i class='fas fa-check'></i> to save.<p><p> <i>[Helpful examples, <a href='https://data.nist.gov/sdp/#/policy'>links to policy and guidance</a>]</i>",
         "edit": "Separate each Reference URL with a comma. When all References are entered, click <i class='fas fa-check'></i> to save.<p> <i>[Helpful examples, <a href='https://data.nist.gov/sdp/#/policy'>links to policy and guidance</a>]</i>",

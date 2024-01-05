@@ -69,10 +69,12 @@ export class PubtypeComponent implements OnInit {
         this.steps[0].isComplete = true;
         for(let i = 1; i < this.steps.length; i++){
             this.steps[i].canEnter = true;
+            this.steps[i].canGoNext = true;
+            this.steps[i].canGoPrev = true;
         }
 
         // Turn on optional step if resource type is software
-        this.steps[3].active = (this.dataModel.resourceType == "software");
+        this.steps[2].active = (this.dataModel.resourceType == "software");
 
         this.steps[5].canGoNext = this.stepService.allDone();
     }

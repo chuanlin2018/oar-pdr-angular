@@ -27,11 +27,11 @@ export class FilesComponent implements OnInit {
         this.parantFormGroup.valueChanges.subscribe(selectedValue  => {
             this.dataModel.willUpload = selectedValue.willUpload;
             if(this.dataModel.willUpload != undefined){
-                this.steps[2].canGoNext = true;
-                this.steps[2].isComplete = true;
+                this.steps[3].canGoNext = true;
+                this.steps[3].isComplete = true;
             }else{
                 this.dataModel.willUpload = undefined;
-                this.steps[2].isComplete = false;
+                this.steps[3].isComplete = false;
             }
             this.steps[5].canGoNext = this.stepService.allDone();
         })

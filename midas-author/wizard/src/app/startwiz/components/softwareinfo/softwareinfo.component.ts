@@ -64,9 +64,9 @@ export class SoftwareinfoComponent implements OnInit {
                 softwareLink: ""
             })
 
-            this.steps[3].isComplete = true;
+            this.steps[2].isComplete = true;
         }else{
-            this.steps[3].isComplete = false;
+            this.steps[2].isComplete = false;
         }
 
         this.steps[5].canGoNext = this.stepService.allDone();
@@ -74,7 +74,7 @@ export class SoftwareinfoComponent implements OnInit {
 
     updateSoftwareLink(evt:any): void {
         this.dataModel.softwareLink = evt.target.value;
-        this.steps[3].isComplete = (this.dataModel.softwareLink?.trim() != "");
+        this.steps[2].isComplete = (this.dataModel.softwareLink?.trim() != "");
         this.steps[5].canGoNext = this.stepService.allDone();
     }
 }

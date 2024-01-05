@@ -12,6 +12,7 @@ import { FormGroup, FormGroupDirective } from '@angular/forms';
 export class RecordNameComponent implements OnInit {
     parantFormGroup!: FormGroup;
     private _sbarvisible : boolean = true;
+    textLength: number = 0;
 
     @Input() dataModel!: DataModel;
     @Input() steps: StepModel[] =[];
@@ -31,6 +32,9 @@ export class RecordNameComponent implements OnInit {
 
     updateRecordName(evt:any) {
         this.dataModel.recordname = evt.target.value;
+        if(this.dataModel.recordname)
+            this.textLength = this.dataModel.recordname.length;
+        
         this.steps[5].isComplete = (this.dataModel.recordname?.trim() != "");
         this.steps[5].canGoNext = this.stepService.allDone();
     }

@@ -81,7 +81,7 @@
 <!-- <pdr-message [defSysErrorPrefix]="'There was a problem while editing your record.'"></pdr-message> -->
 
 <!-- Popup dialog for control button help -->
-<p-overlayPanel class="fileDialog" #op3 [dismissable]="true" [showCloseIcon]="true"
+<p-overlayPanel class="fileDialog" #op3 [dismissable]="true" [showCloseIcon]="true" (onHide)="onHide()"
 [style]="{'display':'inline-block','position':'related','left':'20%','right':'5%','max-width':'800px'}" appendToBody=true>
     <div class="overlay-title">
         About the Control Buttons

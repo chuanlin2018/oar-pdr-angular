@@ -43,6 +43,7 @@ export class EditControlComponent implements OnInit, OnChanges {
     screenSizeBreakPoint: number;
     fileManagerUrl = AppSettings.FILE_MANAGER_URL;
     portalURL: string;
+    overlaypanelOn: boolean = false;
 
     /**
      * the local copy of the draft (updated) metadata.  This parameter is available to a parent
@@ -324,10 +325,19 @@ export class EditControlComponent implements OnInit, OnChanges {
      * the data to its previous state.
      */
     public showEditControlHelpPopup(event, overlaypanel: OverlayPanel): void {
-        overlaypanel.hide();
-        setTimeout(() => {
-            overlaypanel.show(event);
-        }, 100);
+        if(!this.overlaypanelOn){
+            overlaypanel.hide();
+            setTimeout(() => {
+                overlaypanel.show(event);
+                this.overlaypanelOn = true;
+            }, 100);    
+        }else{
+            overlaypanel.hide();
+        }
+    }
+
+    onHide() {
+        this.overlaypanelOn = false;
     }
 
     /**
