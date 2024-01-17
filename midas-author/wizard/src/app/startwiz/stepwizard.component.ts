@@ -3,7 +3,7 @@ import { StepModel } from "./models/step.model";
 import { DataModel } from './models/data.model';
 import { StepService } from './services/step.service';
 import { Subscription } from 'rxjs';
-import { FormControl, FormGroup, Validators, FormBuilder, FormGroupDirective} from '@angular/forms';
+import { FormControl, UntypedFormGroup, Validators, UntypedFormBuilder, FormGroupDirective} from '@angular/forms';
 import { Router } from "@angular/router";
 import { WizardService } from './services/wizard.service';
 import { AppConfig, Config } from './services/config-service.service';
@@ -27,10 +27,10 @@ export class StepWizardComponent implements OnInit {
     confValues: Config;
     private PDRAPI: string;
 
-    fgSteps!: FormGroup;
+    fgSteps!: UntypedFormGroup;
 
     constructor(private stepService: StepService,
-                private fb: FormBuilder, 
+                private fb: UntypedFormBuilder, 
                 private cdr: ChangeDetectorRef,
                 private router: Router,
                 private wizardService: WizardService,
