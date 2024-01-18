@@ -1,16 +1,13 @@
 #! /bin/bash
 #
-# run.sh -- build and optionally test the software in this repo via docker
-#
-# type "run.sh -h" to see detailed help
-#
 prog=`basename $0`
 execdir=`dirname $0`
 [ "$execdir" = "" -o "$execdir" = "." ] && execdir=$PWD
-codedir=`(cd $execdir/.. > /dev/null 2>&1; pwd)`
-os=`uname`
-SED_RE_OPT=r
-[ "$os" != "Darwin" ] || SED_RE_OPT=E
+export CODEDIR=`(cd $execdir/.. > /dev/null 2>&1; pwd)`
+export DOCKERDIR=$execdir
+PACKAGE_NAME=oar-pdr-angular
+
+DISTNAMES="midas-lps midas-wizard pdr-lps pdr-rpa-request pdr-rpa-approve"
 
 dap_dists="midas-author-wizard midas-author-lps"
 avail_dists="$dap_dists"
@@ -18,9 +15,10 @@ avail_dists="$dap_dists"
 function usage {
     cat <<EOF
 
-$prog - build and optionally test the software in this repo via docker
+$prog - build and optionally test the software in this repo
 
 SYNOPSIS
+<<<<<<< HEAD
   $prog [-d|--docker-build] [--dist-dir DIR] [CMD ...] 
         [DISTNAME|angular ...] 
         
@@ -31,46 +29,51 @@ ARGS:
 DISTNAMES:  editable, wizard, pdr-lps
 
 CMDs:
+=======
+  $prog [-d|--docker-build] [build|test|install|shell ...] [ DIST ... ]
+        
+
+ARGS
+>>>>>>> integration
   build     build the software
   test      build the software and run the unit tests
   install   just install the prerequisites (use with shell)
   shell     start a shell in the docker container used to build and test
 
+  DIST      the component (e.g. midas-lps) to build or test
+
 OPTIONS
   -d        build the required docker containers first
-  -t TESTCL include the TESTCL class of tests when testing; as some classes
-            of tests are skipped by default, this parameter provides a means 
-            of turning them on.
 EOF
 }
 
-function wordin {
-    word=$1
-    shift
-
-    echo "$@" | grep -qsw "$word"
-}
-function docker_images_built {
-    for image in "$@"; do
-        (docker images | grep -qs $image) || {
-            return 1
-        }
-    done
-    return 0
-}
-
 set -e
+# set -x
 
+doinstall=
+dodockbuild=
 distvol=
 distdir=
+<<<<<<< HEAD
 dodockbuild=
 cmds=
 args=()
 dargs=()
 dists=
 testcl=()
+=======
+ops=
+args=()
+comps=
+>>>>>>> integration
 while [ "$1" != "" ]; do
     case "$1" in
+        shell|build|install|test)
+            ops="$ops $1"
+            ;;
+        midas-lps|midas-wizard|pdr-lps|pdr-rpa-request|pdr-rpa-approve)
+            comps="$comps $1"
+            ;;
         -d|--docker-build)
             dodockbuild=1
             ;;
@@ -89,13 +92,6 @@ while [ "$1" != "" ]; do
             distvol="-v ${distdir}:/app/dist"
             args=(${args[@]} "--dist-dir=/app/dist")
             ;;
-        -t|--incl-tests)
-            shift
-            testcl=(${testcl[@]} $1)
-            ;;
-        --incl-tests=*)
-            testcl=(${testcl[@]} `echo $1 | sed -e 's/[^=]*=//'`)
-            ;;
         -h|--help)
             usage
             exit
@@ -103,6 +99,7 @@ while [ "$1" != "" ]; do
         -*)
             args=(${args[@]} $1)
             ;;
+<<<<<<< HEAD
         midas-author-wizard|midas-author-lps)
             wordin $1 $dists || dists="$dists $1"
             ;;
@@ -126,14 +123,17 @@ while [ "$1" != "" ]; do
         build|install|test|shell)
             cmds="$cmds $1"
             ;;
+=======
+>>>>>>> integration
         *)
-            echo Unsupported command: $1
+            echo "${prog}: unsupported operation:" $1
             false
             ;;
     esac
     shift
 done
 
+<<<<<<< HEAD
 [ -z "$distvol" ] || dargs=(${dargs[@]} "$distvol")
 [ -z "${testcl[@]}" ] || {
     dargs=(${dargs[@]} --env OAR_TEST_INCLUDE=\"${testcl[@]}\")
@@ -191,5 +191,30 @@ if wordin shell $cmds; then
                     oar-pdr-angular/build-test shell "${args[@]}"
     docker run --rm -ti $volopt "${dargs[@]}" oar-pdr-angular/build-test \
            shell "${args[@]}"
+=======
+ti=
+(echo "$ops" | grep -qs shell) && ti="-ti"
+
+testopts="--cap-add SYS_ADMIN"
+volopt="-v ${CODEDIR}:/home/build"
+
+if echo "$ops" | egrep -qsw 'test|shell'; then
+    [ -n "$dodockbuild" ] && {
+        echo '++' $execdir/dockbuild.sh test
+        $execdir/dockbuild.sh test
+    }
+
+    echo '+' docker run $ti --rm $volopt $testopts $distvol $PACKAGE_NAME/test $ops "${args[@]}" $comps
+    exec docker run $ti --rm $volopt $testopts $distvol $PACKAGE_NAME/test $ops "${args[@]}" $comps
+else
+    # build only
+    [ -n "$dodockbuild" ] && {
+        echo '++' $execdir/dockbuild.sh build
+        $execdir/dockbuild.sh build
+    }
+
+    echo '+' docker run --rm $volopt $distvol $PACKAGE_NAME/build makedist "${args[@]}" $comps
+    exec docker run --rm $volopt $distvol $PACKAGE_NAME/build makedist "${args[@]}" $comps
+>>>>>>> integration
 fi
 

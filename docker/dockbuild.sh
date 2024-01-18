@@ -1,11 +1,8 @@
 #! /bin/bash
 #
-# dockbuild.sh:  build all docker images in this directory
+# buildall.sh:  build all docker images in this directory
 #
-# Usage: dockbuild.sh [-h|--help] [-l LOGFILE] [-q] [image_dir ...]
-#
-# where an image_dir can be one of,
-#    pymongo jq ejsonschema pdrtest pdrangular angtest
+# Usage: buildall.sh
 #
 prog=`basename $0`
 execdir=`dirname $0`
@@ -13,8 +10,8 @@ execdir=`dirname $0`
 codedir=`(cd $execdir/.. > /dev/null 2>&1; pwd)`
 set -e
 
-## These are set by default via _dockbuild.sh; if necessary, uncomment and
-## customize:
+## These are set by default via _dockbuild.sh; if necessary, uncomment
+## and customize
 #
 PACKAGE_NAME=oar-pdr-angular
 # 
@@ -22,7 +19,11 @@ PACKAGE_NAME=oar-pdr-angular
 ## containers to be built.  List them in dependency order (where a latter one
 ## depends the former ones).  
 #
+<<<<<<< HEAD
 DOCKER_IMAGE_DIRS="build-test"
+=======
+DOCKER_IMAGE_DIRS="build test"
+>>>>>>> integration
 
 . $codedir/oar-build/_dockbuild.sh
 
@@ -37,7 +38,14 @@ setup_build
 
 log_intro   # record start of build into log
 
+<<<<<<< HEAD
 if { echo " $BUILD_IMAGES " | grep -qs " build-test "; }; then
     echo '+' docker build $BUILD_OPTS -t $PACKAGE_NAME/build-test build-test
     docker build $BUILD_OPTS -t $PACKAGE_NAME/build-test build-test 2>&1
 fi
+=======
+for container in $BUILD_IMAGES; do 
+    echo '+ ' docker build $BUILD_OPTS -t $PACKAGE_NAME/$container $container | logit
+    docker build $BUILD_OPTS -t $PACKAGE_NAME/$container $container 2>&1 | logit
+done
+>>>>>>> integration
