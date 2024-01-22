@@ -8,7 +8,7 @@
         <form [formGroup]="fgSteps" style="height: 100%;">
             <!-- <div class="step-page-container"> -->
                 <div class="form-step">
-                    <ng-container [ngSwitch]="currentStep?.stepIndex">
+                    <ng-container [ngSwitch]="currentStep.stepIndex">
                         <ng-container *ngSwitchCase="'1'">
                             <div formGroupName="pubtype" class="step-page">
                                 <app-pubtype [dataModel]="dataModel" [steps]="steps"></app-pubtype>
@@ -45,11 +45,11 @@
                 Cancel
             </button>
 
-            <button (click)="onNextStep()" [disabled]="!currentStep?.canGoNext" class="form-nav-btn common-btn">
+            <button (click)="onNextStep()" [disabled]="!currentStep.canGoNext" class="form-nav-btn common-btn">
                 {{ showButtonLabel() }}
             </button>
 
-            <button (click)="onPrevStep()" [disabled]="!currentStep?.canGoPrev" class="form-nav-btn common-btn">
+            <button (click)="onPrevStep()" [disabled]="!currentStep.canGoPrev" class="form-nav-btn common-btn">
                 Prev
             </button>
         </div>

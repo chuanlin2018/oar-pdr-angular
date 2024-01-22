@@ -11,7 +11,7 @@ import { AppConfig, LPSConfig } from './config';
 import * as ngenv from '../../environments/environment';
 
 export const CONFIG_KEY_NAME : string = "LPSConfig";
-export const CONFIG_TS_KEY : StateKey<string> = makeStateKey(CONFIG_KEY_NAME);
+export const CONFIG_TS_KEY : StateKey<AppConfig> = makeStateKey(CONFIG_KEY_NAME);
 export const CFG_DATA : InjectionToken<LPSConfig> = new InjectionToken<LPSConfig>("lpsconfig");
 import { IEnvironment } from '../../environments/ienvironment';
 import * as env from '../../environments/environment';
