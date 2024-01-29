@@ -15,6 +15,7 @@ import { CartService } from 'oarlps';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ToastrModule } from 'ngx-toastr';
 import * as environment from '../environments/environment';
+import { AuthenticationService, Credentials } from 'oarng';
 
 describe('AppComponent', () => {
     let cfg: AppConfig;
@@ -22,18 +23,21 @@ describe('AppComponent', () => {
     let ts: TransferState = new TransferState();
 
     beforeEach(waitForAsync(() => {
-        cfg = (new AngularEnvironmentConfigService(environment, plid, ts)).getConfig() as AppConfig;
+        debugger;
+        cfg = (new AngularEnvironmentConfigService(environment,plid, ts)).getConfig() as AppConfig;
 
         TestBed.configureTestingModule({
 
             declarations: [
                 AppComponent,
-            ], providers: [GoogleAnalyticsService, CartService, { provide: AppConfig, useValue: cfg }]
-            , imports: [RouterTestingModule, FrameModule, ConfigModule, BrowserTransferStateModule, BrowserModule, HttpClientTestingModule, ToastrModule.forRoot()],
+            ], 
+            providers: [AuthenticationService, GoogleAnalyticsService, CartService, { provide: AppConfig, useValue: cfg }]
+            , imports: [RouterTestingModule, FrameModule, BrowserTransferStateModule, BrowserModule, HttpClientTestingModule, ToastrModule.forRoot()],
         }).compileComponents();
     }));
 
     it('should create the app', waitForAsync(() => {
+        debugger;
         const fixture = TestBed.createComponent(AppComponent);
         const app = fixture.debugElement.componentInstance;
 
