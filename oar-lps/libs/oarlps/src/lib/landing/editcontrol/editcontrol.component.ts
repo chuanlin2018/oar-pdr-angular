@@ -224,8 +224,8 @@ export class EditControlComponent implements OnInit, OnChanges {
               if(successful){
                 console.log("Loading draft...");
                 this.statusbar.showMessage("Loading draft...", true)
-                this.mdupdsvc.loadDraft().subscribe(
-                    (md) => 
+                this.mdupdsvc.loadDraft().subscribe({
+                    next: (md) => 
                     {
                         if(md)
                         {
@@ -239,7 +239,7 @@ export class EditControlComponent implements OnInit, OnChanges {
                         // this.edstatsvc._setError(true);
                         }
                     },
-                    (err) => 
+                    error: (err) => 
                     {
                         if(err.statusCode == 404)
                         {
@@ -250,7 +250,7 @@ export class EditControlComponent implements OnInit, OnChanges {
                             this._setEditMode(this.EDIT_MODES.OUTSIDE_MIDAS_MODE);
                         }
                     }
-                );
+                });
               }
             },
             (err) => {

@@ -15,6 +15,7 @@ import { CartService } from 'oarlps';
 import { HttpClientTestingModule } from '@angular/common/http/testing';
 import { ToastrModule } from 'ngx-toastr';
 import * as environment from '../environments/environment';
+import { AuthenticationService, Credentials } from 'oarng';
 
 describe('AppComponent', () => {
     let cfg: AppConfig;
@@ -29,7 +30,8 @@ describe('AppComponent', () => {
 
             declarations: [
                 AppComponent,
-            ], providers: [GoogleAnalyticsService, CartService, { provide: AppConfig, useValue: cfg }]
+            ], 
+            providers: [AuthenticationService, GoogleAnalyticsService, CartService, { provide: AppConfig, useValue: cfg }]
             , imports: [RouterTestingModule, FrameModule, BrowserTransferStateModule, BrowserModule, HttpClientTestingModule, ToastrModule.forRoot()],
         }).compileComponents();
     }));
