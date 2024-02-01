@@ -42,9 +42,9 @@
         "jest-preset-angular": "^13.0.1",
         "process": "0.11.10",
         "ts-jest": "^29.1.0",
-        "typescript": "4.6.2"
+        "typescript": "4.9.5"
     },
     "dependencies": {
-        "rxjs": "~7.5.0"
+        "rxjs": "7.5.7"
     }
 }

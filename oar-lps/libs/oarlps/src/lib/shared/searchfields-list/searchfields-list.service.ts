@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 import { AppConfig } from '../../config/config';
 import { SelectItem } from 'primeng/api';
 import * as _ from 'lodash-es';
@@ -44,7 +44,7 @@ export class SearchfieldsListService {
     let errMsg = (error.message) ? error.message :
       error.status ? `${error.status} - ${error.statusText}` : 'Server error';
     console.error(errMsg); // log to console instead
-    return Observable.throw(errMsg);
+    return throwError(() => errMsg);
   }
 
   /**

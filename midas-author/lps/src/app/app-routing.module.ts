@@ -46,7 +46,7 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes, { initialNavigation: 'enabledNonBlocking', relativeLinkResolution: 'corrected' })],
+  imports: [RouterModule.forRoot(routes, { initialNavigation: 'enabledNonBlocking' })],
   exports: [RouterModule],
   // providers: [ SearchResolve ]
 })

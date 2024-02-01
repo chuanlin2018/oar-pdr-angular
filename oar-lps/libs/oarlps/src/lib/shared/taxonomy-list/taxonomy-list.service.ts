@@ -1,6 +1,6 @@
 import { Injectable, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, throwError } from 'rxjs';
 // import 'rxjs/operator/map';
 // import 'rxjs/operator/catch';
 import { catchError, map } from 'rxjs/operators';
@@ -48,7 +48,7 @@ export class TaxonomyListService {
     let errMsg = (error.message) ? error.message :
       error.status ? `${error.status} - ${error.statusText}` : 'Server error';
     console.error(errMsg); // log to console instead
-    return Observable.throw(errMsg);
+    return throwError(() => errMsg);
   }
 }
 

@@ -42,7 +42,8 @@ const appInitializerFn = (appConfig: AppConfig) => {
             useFactory: appInitializerFn,
             multi: true,
             deps: [AppConfig]
-          },
+          }
+        //   fakeBackendProvider
     ],
     // providers: [fakeBackendProvider],
     bootstrap: [AppComponent]
