@@ -21,31 +21,31 @@ export const context = {
 export const config: LPSConfig = {
     locations: {
         orgHome: "https://nist.gov/",
-        portalBase: "https://oardev.nist.gov/",
-        pdrHome: "https://oardev.nist.gov/pdr/",
-        pdrSearch: "https://oardev.nist.gov/sdp/",
-        mdService:   "https://oardev.nist.gov/rmm/",
-        taxonomyService: "https://oardev.nist.gov/rmm/taxonomy"
+        portalBase: "https://mdsdev.nist.gov/",
+        pdrHome: "https://mdsdev.nist.gov/pdr/",
+        pdrSearch: "https://mdsdev.nist.gov/sdp/",
+        mdService:   "https://mdsdev.nist.gov/rmm/",
+        taxonomyService: "https://mdsdev.nist.gov/rmm/taxonomy"
     },
-    // mdAPI: "http://localhost:9091/midas/dap/mds3/",
     mdAPI: "https://mdsdev.nist.gov/midas/dap/mds3/",
-    metricsAPI: "https://data.nist.gov/rmm/usagemetrics/",
+    // mdAPI: "https://mdsdev.nist.gov/midas/dap/mds3/",
+    metricsAPI: "https://mdsdev.nist.gov/rmm/usagemetrics/",
     // customizationAPI: "https://testdata.nist.gov/customization/",
-    // customizationAPI: "http://localhost:9091/midas/",
     customizationAPI: "https://mdsdev.nist.gov/midas/",
+    // customizationAPI: "https://mdsdev.nist.gov/midas/",
     fileManagerAPI: "https://nextcloud-dev.nist.gov",
     mode: "dev",
     status: "Dev Version",
     appVersion: "v1.3.X",
     production: context.production,
     editEnabled: true,
-    distService: "https://testdata.nist.gov/od/ds/",
-    gacode: "not-set",
+    distService: "https://mdsdev.nist.gov/od/ds/",
+    gaCode: "not-set",
     screenSizeBreakPoint: 1060,
     bundleSizeAlert: 500000000,
     // Decide how many seconds to wait to refresh metrics after user download one/more files
     delayTimeForMetricsRefresh: 300,
-    standardNISTTaxonomyURI: "https://data.nist.gov/od/dm/nist-themes/",
+    standardNISTTaxonomyURI: "https://mdsdev.nist.gov/od/dm/nist-themes/",
     portalAPI: "https://mdsdev.nist.gov/portal/landing"  
 }
 
