@@ -42,7 +42,6 @@
               "../../node_modules/primeflex/primeflex.css",
               "../../node_modules/primeng/resources/themes/saga-blue/theme.css",
               "../../node_modules/oarng/src/assets/styles/font-awesome/css/font-awesome.css",
-              "../../node_modules/oarng/src/assets/styles/fontawesome-free-5.15.4-web/css/all.css",
               "../../node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles/main.css",
               "src/app/content/modal.less",
