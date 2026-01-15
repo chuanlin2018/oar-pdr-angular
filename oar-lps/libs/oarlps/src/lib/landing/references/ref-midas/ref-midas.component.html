@@ -3,7 +3,7 @@
     <div class="editable_container">
         <!-- <ng-template #hasReferences> -->
         <div class="editable_field" style="max-width: calc(100% - 70px); margin-right: 5px;">
-            <div *ngIf="isEditMode && (!record['references'] || record['references'].length == 0)"  [ngStyle]="mdupdsvc.getFieldStyle(fieldName, dataChanged, undefined, isEditing)" style="margin-bottom: 10px; padding-left: 10px;">
+            <div *ngIf="isEditMode && (record && !record['references'] || record['references'].length == 0)"  [ngStyle]="mdupdsvc.getFieldStyle(fieldName, dataChanged, undefined, isEditing)" style="margin-bottom: 10px; padding-left: 10px;">
                 Add references to papers and other datasets.
             </div>
 
